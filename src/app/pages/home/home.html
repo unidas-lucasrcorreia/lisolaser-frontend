@@ -1,0 +1,357 @@
+<!-- H1 ÚNICO DA PÁGINA (fixo; não muda a cada slide) -->
+<h1 class="sr-only">Depilação a Laser • Lisô Laser — Resultados seguros e confortáveis</h1>
+
+@if (cms(); as c) {
+  <!-- HERO / BANNER (sem H1 para evitar duplicidade) -->
+  @if (c.banners?.length) {
+    <app-banner [slides]="c.banners" [pagination]="true" aria-label="Destaques e campanhas"></app-banner>
+  }
+
+  <!-- OFERTAS -->
+  @if (offersSection(); as sec) {
+    <section id="offers" class="section offers" aria-labelledby="offers-heading">
+      <div class="container">
+        <img class="element-logo" src="/images/element-logo.png" alt="" />
+        <div class="row">
+          <div class="col-12">
+            <header class="section__header">
+              @if (sec.preTitle) {
+                <p class="intro light">{{ sec.preTitle }}</p>
+              }
+              <h2 id="offers-heading">{{ sec.title }}</h2>
+            </header>
+          </div>
+
+          <div class="col-12">
+            <app-caroussel
+              [contentMode]="true"
+              aria-label="Ofertas em destaque"
+              [centeredSlides]="false"
+              [perView]="3"
+              [spaceBetween]="117"
+              [peek]="0"
+              [loop]="true"
+              [navigation]="false"
+              [pagination]="true"
+              [autoplay]="false"
+              [breakpoints]="offersBreakpoints"
+            >
+              @for (o of offersList(); track o.title) {
+                <swiper-slide class="carousel__slide">
+                  <article class="offer-card">
+                    <img class="offer-card__bg" [src]="imgOf(o.image?.[0]) || '/images/offer-fallback.png'" alt="" loading="lazy" decoding="async" />
+                    <div class="offer-card__shade"></div>
+                    <div class="offer-card__content">
+                      @if (o.sessions) {
+                        <p class="offer-card__tag">{{ o.sessions }} sessões</p>
+                      }
+                      <h3 class="offer-card__title" [innerHTML]="o.title"></h3>
+                      <div class="offer-card__bottom">
+                        <div class="offer-card__price-wrap">
+                          <span class="offer-card__label">A partir de:</span>
+                          <p class="offer-card__price">
+                            @if (o.installments) {
+                              <span class="installments">{{ o.installments }}x</span>
+                            }
+                            <span class="currency">R$</span>{{ o.price }}
+                          </p>
+                        </div>
+                        @if (o.observation) {
+                          <div class="obs">{{ o.observation }}</div>
+                        }
+                        <a class="offer-card__cta" routerLink="/agendamento">Agendar</a>
+                      </div>
+                    </div>
+                  </article>
+                </swiper-slide>
+              }
+            </app-caroussel>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- POR QUE ESCOLHER (bloco 1) -->
+  @if (firstFeatured(); as f) {
+    <section class="why-choose light section" aria-labelledby="why-choose-heading-1">
+      <img class="element-logo" src="/images/element-primary.png" alt="" />
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-6 col-xxl-5 text-col">
+            <header class="section__header">
+              @if (f.preTitle) {
+                <p class="intro primary">{{ f.preTitle }}</p>
+              }
+              <h2 id="why-choose-heading-1">{{ f.title }}</h2>
+            </header>
+            @if (f.text) {
+              <p class="section-text">{{ f.text }}</p>
+            }
+          </div>
+          <div class="col-12 col-md-5 offset-md-1 offset-xxl-2 col-xxl-5">
+            <figure>
+              <img [src]="imgOf(f.image?.[0]) || '/images/why-choose-us.png'" alt="" loading="lazy" decoding="async" width="800" height="600" />
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- DEPOIMENTOS -->
+  @if (testimonialsSection(); as ts) {
+    <section id="testimonials" class="section testimonials" aria-labelledby="testimonials-heading">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <header class="section__header">
+              <h2 id="testimonials-heading">{{ ts.title }}</h2>
+            </header>
+          </div>
+        </div>
+      </div>
+
+      <app-caroussel
+        [contentMode]="true"
+        [perView]="3.6"
+        [centeredSlides]="false"
+        [spaceBetween]="8"
+        [navigation]="false"
+        [loop]="true"
+        [autoplay]="false"
+        [initialSlide]="1"
+        [breakpoints]="testimonialsBP"
+      >
+        @for (t of testimonialsList(); track t.name; let i = $index) {
+          <swiper-slide class="carousel__slide">
+            <article class="t-card">
+              <h3 class="sr-only" id="t-{{ i }}">Depoimento de {{ t.name }}</h3>
+              <div class="t-card__quote-mark" aria-hidden="true">
+                <img src="/images/quote-icon.svg" alt="" />
+              </div>
+              <p class="t-card__text">{{ t.text }}</p>
+              <footer class="t-card__footer">
+                <div class="t-card__author">
+                  <strong>{{ t.name }}</strong>
+                  <small>{{ t.role }}</small>
+                </div>
+                <div class="t-card__rating">
+                  <span class="sr-only">5 de 5 estrelas</span>
+                  @for (star of [0, 1, 2, 3, 4]; track $index) {
+                    <img src="/images/rating-icon.svg" alt="" />
+                  }
+                </div>
+              </footer>
+            </article>
+          </swiper-slide>
+        }
+      </app-caroussel>
+    </section>
+  }
+
+  <!-- ÁREAS DE TRATAMENTO -->
+  <app-treatment-areas />
+
+  <!-- DEPOIMENTOS EM VIDEO-->
+  @if (videoTestimonialsSection(); as ts) {
+    <section id="video-testimonials" class="section video-testimonials" aria-labelledby="video-testimonials-heading">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-8 offset-md-2">
+            <header class="section__header">
+              @if (ts.preTitle) {
+                <p class="intro primary">{{ ts.preTitle }}</p>
+              }
+              <h2 id="video-testimonials-heading" [innerHTML]="ts.title"></h2>
+            </header>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-10 offset-md-1">
+            <div class="testimonials-wrapper">
+              <app-caroussel
+                [contentMode]="true"
+                [perView]="3"
+                [centeredSlides]="false"
+                [spaceBetween]="20"
+                [navigation]="false"
+                [loop]="false"
+                [autoplay]="false"
+                [initialSlide]="0"
+                [pagination]="true"
+                [breakpoints]="videoTestimonialsBP"
+              >
+                @for (t of videoTestimonialsList(); track t.name; let i = $index) {
+                  <swiper-slide class="carousel__slide">
+                    <img (click)="handlePlayer(t.video?.[0])" [src]="imgOf(t.thumbnail?.[0])" alt="" />
+                    <img (click)="handlePlayer(t.video?.[0])" src="/images/player.png" alt="" class="play" />
+                  </swiper-slide>
+                }
+              </app-caroussel>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- CTA -->
+  <section class="cta-section section" aria-labelledby="cta-section-heading">
+    <div class="container">
+      <img class="element-logo" src="/images/cta-element.png" alt="" />
+      <div class="row">
+        <div class="col-12">
+          <span> Diga adeus aos pelos hoje mesmo </span>
+          <h3>Transforme a sua pele hoje</h3>
+          <a routerLink="/agendamento" class="btn"> Agende sua avaliação gratuita </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- POR QUE ESCOLHER (bloco 2 invertido) -->
+  @if (secondFeatured(); as s) {
+    <section class="why-choose primary section" aria-labelledby="why-choose-heading-2">
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-md-12 col-lg-5 testimonial-col">
+            <!-- @if (s.video?.[0]; as src) {
+              <figure class="testimonial-media">
+                <video controls preload="metadata" class="testimonial-video" [poster]="imgOf(s.image?.[0])">
+                  <source [src]="imgOf(s.video?.[0])" />
+                  Seu navegador não suporta vídeo HTML5.
+                </video>
+              </figure>
+            } -->
+            <img [src]="imgOf(s.image?.[0])" alt="" />
+          </div>
+          <div class="col-12 col-md-12 offset-lg-1 col-lg-5 text-col">
+            <header class="section__header">
+              @if (s.preTitle) {
+                <p class="intro primary">{{ s.preTitle }}</p>
+              }
+              <h2 id="why-choose-heading-2">{{ s.title }}</h2>
+            </header>
+            @if (s.text) {
+              <p class="section-text">{{ s.text }}</p>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- VÍDEO -->
+  @if (videoSection(); as v) {
+    <section id="video-section" class="section" aria-labelledby="video-heading">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <header class="section__header">
+              @if (v.preTitle) {
+                <p class="intro light">{{ v.preTitle }}</p>
+              }
+              <h2 id="video-heading">{{ v.title }}</h2>
+            </header>
+          </div>
+          <div class="col-12 col-md-10 offset-md-1">
+            @defer (on viewport) {
+              @if (v.video?.[0]; as src) {
+                <!-- sem () -->
+                <video autoplay muted loop playsinline preload="metadata" class="video-cover">
+                  <source [src]="imgOf(src)" />
+                  Seu navegador não suporta vídeo HTML5.
+                </video>
+              }
+            } @placeholder {
+              <div class="media-skeleton" aria-hidden="true"></div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- FEATURES -->
+  @if (differentialSection(); as df) {
+    <section id="features" class="section" aria-labelledby="features-heading">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <header class="section__header">
+              @if (df.preTitle) {
+                <p class="intro light">{{ df.preTitle }}</p>
+              }
+              <h2 id="features-heading">{{ df.title }}</h2>
+            </header>
+          </div>
+
+          <div class="col-12">
+            <ul class="feature-grid" role="list">
+              @for (d of differentialList(); track d.title) {
+                <li role="listitem">
+                  <img [src]="imgOf(d.icon?.[0]) || '/images/icons/differential/fallback.svg'" alt="" />
+                  <div class="title" [innerHTML]="d.title"></div>
+                  <p>{{ d.text }}</p>
+                </li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+
+  <!-- FAQ -->
+  @if (faqSection(); as fq) {
+    <section id="faq" class="section" aria-labelledby="faq-heading">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <header class="section__header">
+              @if (fq.preTitle) {
+                <p class="intro light">{{ fq.preTitle }}</p>
+              }
+              <h2 id="faq-heading">{{ fq.title }}</h2>
+            </header>
+          </div>
+
+          <div class="col-12">
+            @if (loadingFaq()) {
+              <app-skeleton variant="text" [lines]="4"></app-skeleton>
+            } @else {
+              @if (faqs().length) {
+                <div class="faq">
+                  @for (item of faqs(); track item.question) {
+                    <details>
+                      <summary>{{ item.question }}</summary>
+                      <p>{{ item.answer }}</p>
+                    </details>
+                  }
+                </div>
+              } @else {
+                <p class="muted">Nenhuma pergunta frequente disponível.</p>
+              }
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    @if (currentVideo && showVideo) {
+      <div id="video-modal">
+        <div (click)="closeVideo()" class="backdrop"></div>
+        <video controls controlsList="nodownload noplaybackrate" oncontextmenu="return false" disablepictureinpicture preload="metadata" class="testimonial-video" autoplay>
+          <source [src]="imgOf(currentVideo)" />
+          Seu navegador não suporta vídeo HTML5.
+        </video>
+      </div>
+    }
+  }
+} @else {
+  <app-home-skeleton />
+}

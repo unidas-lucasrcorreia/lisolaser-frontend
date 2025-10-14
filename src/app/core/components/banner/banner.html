@@ -1,0 +1,85 @@
+<section class="banner" aria-label="Banner principal">
+  <swiper-container #swiper init="false" class="banner__swiper">
+    @for (s of viewSlides; track s.id; let i = $index) {
+      <swiper-slide class="banner__slide" [style.background]="getBg(s)" [style.color]="getInk(s)">
+        @switch (s.type) {
+          @case ('image-right') {
+            <ng-container *ngTemplateOutlet="imageRightTpl; context: { $implicit: s, isFull: false, index: i }"> </ng-container>
+          }
+          @case ('image-right-full') {
+            <ng-container *ngTemplateOutlet="imageRightTpl; context: { $implicit: s, isFull: true, index: i }"> </ng-container>
+          }
+          @case ('video-center') {
+            <div class="layout-video center-video">
+              <video #autoVideo class="bg-video" [attr.poster]="s.poster || null" preload="metadata" autoplay muted loop playsinline fetchpriority="high" aria-hidden="true">
+                <source [src]="s.videoSrc" type="video/mp4" />
+              </video>
+
+              <div class="center">
+                <h2 class="title" [innerHTML]="s.title"></h2>
+                <p class="copy">{{ s.text }}</p>
+                @if (s.ctaLabel && s.href) {
+                  <a class="cta cta--solid" [routerLink]="s.href">{{ s.ctaLabel }}</a>
+                }
+              </div>
+            </div>
+          }
+          @case ('video-lead') {
+            <div class="layout-video layout-two-cols layout-lead-video">
+              <video #autoVideo class="bg-video" [attr.poster]="s.poster || null" preload="metadata" autoplay muted loop playsinline fetchpriority="high" aria-hidden="true">
+                <source [src]="s.videoSrc" type="video/mp4" />
+              </video>
+
+              <div class="container no-padding-mobile">
+                <div class="row">
+                  <div class="col-12 col-xl-6 col-xxl-5 lead-col">
+                    <h2 class="title" [innerHTML]="s.title"></h2>
+                    <p class="copy">{{ s.text }}</p>
+                    @if (s.ctaLabel && s.href) {
+                      <a class="cta cta--solid" [routerLink]="s.href">{{ s.ctaLabel }}</a>
+                    }
+                  </div>
+
+                  <div class="col-12 col-xl-5 offset-xl-1 col-xxl-4 offset-xxl-3 lead-col">
+                    <app-lead-form></app-lead-form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          }
+        }
+      </swiper-slide>
+    }
+  </swiper-container>
+</section>
+
+<ng-template #imageRightTpl let-s let-isFull="isFull" let-index="index">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <div class="layout-split" [class.layout-split--full]="isFull">
+          <div class="split-text">
+            <h2 class="title" [innerHTML]="s.title"></h2>
+            <div class="title-separator" [style.background]="getInk(s)"></div>
+            <p class="copy">{{ s.text }}</p>
+            @if (s.ctaLabel && s.href) {
+              <a class="cta" [routerLink]="s.href">{{ s.ctaLabel }}</a>
+            }
+          </div>
+
+          <div class="split-media" [class.split-media--full]="isFull">
+            <img
+              [src]="s.src"
+              [alt]="s.alt || s.title"
+              [attr.width]="s.imgW || 1200"
+              [attr.height]="s.imgH || 800"
+              loading="lazy"
+              decoding="async"
+              [attr.fetchpriority]="index === 0 ? 'high' : null"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</ng-template>

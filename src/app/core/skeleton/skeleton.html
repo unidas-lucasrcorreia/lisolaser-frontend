@@ -1,0 +1,21 @@
+@switch (variant()) {
+  @case ('text') {
+    <ul class="sk-text" [class.sk--shimmer]="animation() === 'shimmer'" [class.sk--pulse]="animation() === 'pulse'" [class.sk--noanim]="animation() === 'none'">
+      @for (i of textRows(); track i; let last = $last) {
+        <li class="sk-line" [style.width]="last ? cssSize(lastLineWidth()) : '100%'"></li>
+      }
+    </ul>
+  }
+
+  @default {
+    <!-- Rect / Square / Circle (decidido por classes) -->
+    <div
+      class="sk"
+      [class.is-circle]="variant() === 'circle'"
+      [class.is-square]="variant() === 'square'"
+      [class.sk--shimmer]="animation() === 'shimmer'"
+      [class.sk--pulse]="animation() === 'pulse'"
+      [class.sk--noanim]="animation() === 'none'"
+    ></div>
+  }
+}

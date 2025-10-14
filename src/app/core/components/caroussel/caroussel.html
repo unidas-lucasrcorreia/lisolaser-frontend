@@ -1,0 +1,25 @@
+<section class="carousel" [class.has-peek]="peek > 0" [style.--peek]="peek + '%'">
+  <div class="peek-viewport">
+    <div class="peek-wrapper">
+      <swiper-container #swiper init="false" class="carousel__swiper">
+        @if (!contentMode) {
+          @for (s of slides; track s.src) {
+            <swiper-slide class="carousel__slide">
+              @if (s.href) {
+                <a [href]="s.href" class="carousel__link" rel="noopener">
+                  <img class="carousel__image swiper-lazy" [attr.data-src]="s.src" [alt]="s.alt || ''" decoding="async" />
+                  <div class="swiper-lazy-preloader"></div>
+                </a>
+              } @else {
+                <img class="carousel__image swiper-lazy" [attr.data-src]="s.src" [alt]="s.alt || ''" decoding="async" />
+                <div class="swiper-lazy-preloader"></div>
+              }
+            </swiper-slide>
+          }
+        } @else {
+          <ng-content></ng-content>
+        }
+      </swiper-container>
+    </div>
+  </div>
+</section>

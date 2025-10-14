@@ -1,0 +1,105 @@
+@use 'sass:math';
+
+// -------------------------
+// Grid simples (12 cols)
+// -------------------------
+$grid-columns: 12;
+$grid-gutter: 24px;
+
+$bp-sm: 576px;
+$bp-md: 768px;
+$bp-lg: 992px;
+$bp-xl: 1200px;
+$bp-xxl: 1600px;
+
+// Container
+.container {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: calc(#{$grid-gutter} / 2);
+  padding-right: calc(#{$grid-gutter} / 2);
+
+  @media (min-width: $bp-sm) {
+    max-width: 540px;
+  }
+  @media (min-width: $bp-md) {
+    max-width: 720px;
+  }
+  @media (min-width: $bp-lg) {
+    max-width: 960px;
+  }
+  @media (min-width: $bp-xl) {
+    max-width: 1140px;
+  }
+  @media (min-width: $bp-xxl) {
+    max-width: 1500px;
+  }
+}
+
+.container-fluid {
+  width: 90%;
+}
+
+// Row
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: calc(-#{$grid-gutter} / 2);
+  margin-right: calc(-#{$grid-gutter} / 2);
+}
+
+// Padding nas colunas (gutter)
+.row > * {
+  box-sizing: border-box;
+  padding-left: calc(#{$grid-gutter} / 2);
+  padding-right: calc(#{$grid-gutter} / 2);
+}
+
+// Coluna fluida (tipo .col do Bootstrap)
+.col {
+  flex: 1 0 0%;
+  max-width: 100%;
+}
+
+// Helper para gerar colunas fixas
+@mixin make-col($n) {
+  $w: math.percentage(math.div($n, $grid-columns));
+  flex: 0 0 $w;
+  max-width: $w;
+}
+
+// col-1 ... col-12 (sempre)
+@for $i from 1 through $grid-columns {
+  .col-#{$i} {
+    @include make-col($i);
+  }
+}
+
+// Responsivas: col-sm-*, col-md-*, col-lg-*, col-xl-*
+@each $name, $bp in (sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl, xxl: $bp-xxl) {
+  @media (min-width: $bp) {
+    @for $i from 1 through $grid-columns {
+      .col-#{$name}-#{$i} {
+        @include make-col($i);
+      }
+    }
+  }
+}
+
+@for $i from 1 through ($grid-columns - 1) {
+  .offset-#{$i} {
+    margin-left: math.percentage(math.div($i, $grid-columns));
+  }
+}
+
+// Responsivas: offset-sm-*, offset-md-*, offset-lg-*, offset-xl-*
+@each $name, $bp in (sm: $bp-sm, md: $bp-md, lg: $bp-lg, xl: $bp-xl, xxl: $bp-xxl) {
+  @media (min-width: $bp) {
+    @for $i from 1 through ($grid-columns - 1) {
+      .offset-#{$name}-#{$i} {
+        margin-left: math.percentage(math.div($i, $grid-columns));
+      }
+    }
+  }
+}

@@ -1,0 +1,184 @@
+/* You can add global styles to this file, and also import other style files */
+@use 'reset';
+@use 'variables' as *;
+@use 'grid' as *;
+@use 'font' as *;
+@use 'buttons';
+
+@use 'swiper/scss';
+@use 'swiper/scss/navigation';
+@use 'swiper/scss/pagination';
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.sr-only-focusable:active,
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+.btn-primary {
+  background-color: $color-primary;
+  color: $color-white;
+  &.outline {
+    background: none;
+    border: 0.5px solid $color-primary;
+    border-radius: 24px;
+    color: $color-primary;
+  }
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.banner__swiper {
+  border-radius: 0 !important;
+}
+/* 1) garante que o conteúdo do slide fique acima por padrão */
+swiper-container.banner__swiper::part(slide) {
+  position: relative;
+  z-index: 1; // acima da paginacao
+}
+
+/* 2) quando EXISTIR a UL do select aberta dentro do mesmo banner,
+      derruba só a paginação (não some, só sai do caminho) */
+swiper-container.banner__swiper:has(.unit-options)::part(pagination) {
+  z-index: 0 !important; // ou -1 se preferir esconder
+  pointer-events: none !important; // não intercepta cliques
+}
+
+/* 3) eleva a lista do select para o topo da pilha local */
+app-unit-select .unit-options {
+  position: relative; /* ou absolute/fixed se for seu layout */
+  z-index: 9999; /* acima de qualquer coisa do banner */
+}
+
+/* 4) se quiser restringir ao mobile: */
+@media (max-width: $bp-md) {
+  swiper-container.banner__swiper:has(.unit-options)::part(pagination) {
+    z-index: 0 !important;
+    pointer-events: none !important;
+  }
+}
+swiper-container.banner__swiper::part(pagination) {
+  z-index: var(--pagination-z, 10); /* 10 normal */
+}
+body:has(.unit-options) swiper-container.banner__swiper {
+  --pagination-z: -1; /* derruba a paginação quando o dropdown existe */
+}
+
+/* 1) O body é quem rola */
+html,
+body {
+  height: auto;
+  overflow-x: hidden;
+}
+body {
+  overflow-y: auto;
+}
+
+/* 2) Zere overflow do wrapper para não criar um scroller próprio */
+.content-wrapper {
+  overflow: visible; /* ou remova qualquer overflow: auto/scroll; */
+  min-height: 100%;
+}
+
+/* 3) Variáveis de segurança (notch) */
+:root {
+  --safe-top: env(safe-area-inset-top, 0);
+  --header-h: 72px; /* ajuste para a altura real do seu header */
+}
+
+/* 4) Header padrão (desktop/Android OK com fixed) */
+.site-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 1000;
+  background: #fff;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+
+  /* reduzir jitter de repaints */
+  backface-visibility: hidden;
+  transform: translateZ(0);
+}
+
+/* 5) Espaço no conteúdo para não ficar “por baixo” do header */
+.content-wrapper {
+  /* padding-top dinâmico (safe area + altura do header) */
+  padding-top: calc(var(--safe-top) + var(--header-h));
+}
+
+/* 6) iOS: preferir sticky (mais estável com a barra do browser) */
+@supports (-webkit-touch-callout: none) {
+  .site-header {
+    position: sticky; /* no iOS fica colado sem “pulos” */
+    top: var(--safe-top);
+  }
+}
+
+/* 7) Suaviza âncoras / elementos com position: sticky internos */
+html {
+  scroll-padding-top: calc(var(--safe-top) + var(--header-h));
+}
+
+/* Breadcrumb */
+.breadcrumb {
+  color: $grey-button;
+  font-family: 'Open Sans';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 36px; /* 225% */
+  margin-bottom: 80px;
+  margin-top: 20px;
+  @media (max-width: $bp-md) {
+    font-size: 14px;
+  }
+  .breadcrumb__list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .breadcrumb__item a {
+    text-decoration: none;
+    color: inherit;
+
+    &:hover,
+    &:focus {
+      text-decoration: underline;
+    }
+  }
+
+  [aria-current='page'] {
+    text-decoration: none;
+  }
+}
+
+:fullscreen,
+:-webkit-full-screen {
+  /* prefixo Safari */
+  object-fit: contain !important;
+}

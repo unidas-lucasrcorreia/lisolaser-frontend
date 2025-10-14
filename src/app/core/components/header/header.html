@@ -1,0 +1,57 @@
+<header id="header" class="site-header" (keydown.escape)="closeMenu()">
+  <div class="container">
+    <div class="row">
+      <div class="col-12 header__bar">
+        <a class="header__brand" [routerLink]="['/']" aria-label="Liso Laser">
+          <img src="images/logo.png" alt="Liso Laser" class="header__logo" width="113" height="61" decoding="async" fetchpriority="high" />
+        </a>
+
+        <nav class="header__nav" aria-label="Navegação principal">
+          <ul id="navigation" class="header__menu" role="menubar">
+            <li role="none">
+              <a class="header__link" role="menuitem" [routerLink]="['/depilacao-feminina']" routerLinkActive="router-link-active">depilação feminina</a>
+            </li>
+            <li role="none">
+              <a class="header__link" role="menuitem" [routerLink]="['/depilacao-masculina']" routerLinkActive="router-link-active">depilação masculina</a>
+            </li>
+            <li role="none">
+              <a class="header__link" role="menuitem" [routerLink]="['/unidades']" routerLinkActive="router-link-active">Unidades</a>
+            </li>
+            <li role="none">
+              <a class="header__link" role="menuitem" [routerLink]="['/sobre']" routerLinkActive="router-link-active">Sobre</a>
+            </li>
+            <li role="none">
+              <a class="header__link" role="menuitem" [routerLink]="['/blog']" routerLinkActive="router-link-active">Blog</a>
+            </li>
+            <li role="none">
+              <a class="header__link" role="menuitem" href="https://lisolaserfranchising.com.br/seja-um-franqueado/" target="_blank">seja um franqueado</a>
+            </li>
+          </ul>
+        </nav>
+
+        <a id="schedule-action" class="btn btn-primary header__cta" [routerLink]="['/agendamento']" routerLinkActive="router-link-active"> Agendar Avaliação </a>
+
+        <button type="button" class="hamburger" aria-label="Abrir menu" [attr.aria-expanded]="menuOpen()" [class.is-open]="menuOpen()" (click)="toggleMenu()">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+@if (menuOpen()) {
+  <nav class="mm-sheet" aria-label="Menu mobile">
+    <ul class="mm-list">
+      <li><a (click)="navAndClose('/depilacao-feminina')">DEPILAÇÃO FEMININA</a></li>
+      <li><a (click)="navAndClose('/depilacao-masculina')">DEPILAÇÃO MASCULINA</a></li>
+      <li><a (click)="navAndClose('/unidades')">UNIDADES</a></li>
+      <li><a (click)="navAndClose('/sobre')">SOBRE</a></li>
+      <li><a (click)="navAndClose('/blog')">BLOG</a></li>
+      <li role="none">
+        <a class="header__link" role="menuitem" href="https://lisolaserfranchising.com.br/seja-um-franqueado/" target="_blank">seja um franqueado</a>
+      </li>
+    </ul>
+
+    <a class="mm-cta" (click)="navAndClose('/agendamento')">Agendar</a>
+  </nav>
+}

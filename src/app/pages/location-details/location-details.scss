@@ -1,0 +1,236 @@
+@use 'variables' as *;
+@use 'grid' as *;
+
+/* Página */
+#location-details-page {
+  background: $background-color;
+  color: $text-color;
+  padding: 0 0 80px;
+
+  /* =========================
+     Skeletons — Host tuning
+     ========================= */
+  .sk-text {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: var(--sk-gap, 10px);
+  }
+
+  .sk-line {
+    height: var(--sk-line-height, 14px);
+    border-radius: var(--sk-radius, 8px);
+  }
+
+  .header-skeleton {
+    margin: 8px 0 24px;
+    /* nada extra: deixamos as 3 linhas controladas pelos inputs */
+  }
+
+  .hero-skeleton {
+    inline-size: 100%;
+    aspect-ratio: 16 / 9;
+    border-radius: 12px;
+    overflow: hidden;
+    margin: 16px 0 32px;
+  }
+
+  .stack-16 {
+    display: grid;
+    gap: 16px;
+  }
+
+  .info-card-skel {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: 12px 14px;
+    align-items: start;
+    border: 1px solid $color-gray-200;
+    border-radius: 8px;
+    background: #fff;
+    padding: 16px;
+
+    .icon {
+      inline-size: 28px;
+      block-size: 28px;
+      border-radius: 6px;
+    }
+    .title-line {
+      height: 18px;
+      inline-size: 40%;
+    }
+    .row-line {
+      height: 14px;
+      inline-size: 80%;
+    }
+    .rows {
+      display: grid;
+      gap: 8px;
+    }
+  }
+}
+
+/* Header */
+.page__header {
+  margin-block: clamp(12px, 2vw, 20px) clamp(16px, 3vw, 28px);
+
+  h1 {
+    margin: 0;
+    font-size: clamp(28px, 3.2vw, 40px);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px;
+    color: $grey-title-dark;
+  }
+}
+
+/* Cards de informação (direita) */
+.info-card {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: 14px;
+  padding: clamp(14px, 2.2vw, 20px);
+  margin-bottom: clamp(12px, 2vw, 18px);
+
+  border: 1px solid $color-primary;
+  border-radius: 8px;
+  background: $color-white;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.02);
+
+  &__icon {
+    img {
+      inline-size: 27px;
+      block-size: 27px;
+    }
+  }
+
+  &__title {
+    margin: 0 0 6px;
+    font-size: clamp(16px, 1.5vw, 20px);
+    color: $grey-text-medium;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 36px;
+  }
+
+  &__text {
+    margin: 0;
+    color: $grey-text-lighter;
+    font-size: clamp(14px, 1.2vw, 16px);
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    letter-spacing: 1px;
+  }
+
+  &__list {
+    margin: 0;
+    padding: 0;
+
+    .rowline {
+      display: grid;
+      grid-template-columns: 130px 1fr;
+      gap: 12px;
+      font-size: clamp(14px, 1.2vw, 16px);
+      color: $text-color-light;
+
+      dd {
+        margin: 0;
+      }
+    }
+  }
+}
+
+/* Contatos */
+.contact-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  gap: 10px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  li {
+    display: grid;
+    grid-template-columns: 20px 1fr;
+    gap: 10px;
+    align-items: center;
+
+    border-radius: 4px;
+    border: 1px solid $color-primary;
+    padding: 3px 8px;
+
+    @media (max-width: $bp-md) {
+      gap: 0;
+    }
+
+    img {
+      inline-size: 18px;
+      block-size: 18px;
+    }
+
+    .link {
+      color: $color-primary;
+      text-decoration: none;
+      font-size: 12px;
+      font-style: normal;
+      font-weight: 400;
+      line-height: normal;
+      letter-spacing: 1px;
+
+      &:hover {
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+/* CTA */
+.cta-wrap {
+  margin-top: clamp(12px, 2.5vw, 26px);
+}
+.cta-primary {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+
+  padding: 12px 18px;
+  border-radius: 4px;
+  background: $color-primary;
+  color: $color-white;
+  text-decoration: none;
+  transition:
+    filter 0.18s ease,
+    transform 0.06s ease;
+
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+  text-transform: uppercase;
+
+  &:hover {
+    filter: brightness(1.05);
+  }
+  &:active {
+    transform: translateY(1px);
+  }
+}
+
+/* Opcional: ajuste de espaçamento da header após breadcrumb */
+.page__header {
+  margin-top: 4px;
+}
+
+/* Ajustes responsivos */
+@media (max-width: $bp-md) {
+  .info-card {
+    grid-template-columns: 28px 1fr;
+  }
+  .info-card__icon {
+    inline-size: 28px;
+    block-size: 28px;
+  }
+}

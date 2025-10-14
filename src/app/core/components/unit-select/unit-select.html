@@ -1,0 +1,44 @@
+<div class="unit-select" [class.appearance-pill]="appearance === 'pill'" [class.appearance-square]="appearance === 'square'" [class.size-sm]="size === 'sm'" [class.size-md]="size === 'md'">
+  <!-- Campo -->
+  <input
+    #unitInput
+    class="unit-input"
+    [id]="inputId"
+    type="text"
+    role="combobox"
+    [attr.name]="'locationSelection'"
+    aria-autocomplete="list"
+    [attr.aria-expanded]="dropdownOpen"
+    aria-haspopup="listbox"
+    [attr.aria-controls]="listboxId"
+    [attr.aria-activedescendant]="activeOptionId || null"
+    [formControl]="search"
+    [placeholder]="placeholder"
+    [disabled]="disabled"
+    autocomplete="new-location"
+    autocapitalize="off"
+    autocorrect="off"
+    spellcheck="false"
+    (focus)="onFocus()"
+    (blur)="onBlur()"
+    (keydown)="onKeydown($event)"
+  />
+
+  <!-- Lista -->
+  @if (dropdownOpen) {
+    <ul class="unit-options" role="listbox" [attr.id]="listboxId" (pointerdown)="$event.stopPropagation()" (wheel)="$event.stopPropagation()">
+      @for (u of filtered; track trackById($index, u); let i = $index) {
+        <li role="option" [attr.id]="optionId(i)" [attr.aria-selected]="i === activeIndex" (click)="choose(u)">
+          @if (distanceFromCep(u)) {
+            <span class="dist">{{ distanceFromCep(u) }}</span>
+          }
+          <strong>{{ u.data.name }}</strong> | {{ u.data.address?.street }} •
+          {{ u.data.address?.number }}
+        </li>
+      }
+      @if (!filtered.length) {
+        <li class="empty" role="option" aria-disabled="true">Nenhuma unidade encontrada</li>
+      }
+    </ul>
+  }
+</div>

@@ -1,0 +1,31 @@
+<div
+  #wrap
+  class="ba"
+  tabindex="0"
+  role="region"
+  aria-label="Comparador de imagens: arraste para ver antes e depois"
+  [style.--cut]="posPercent() + '%'"
+  (pointerdown)="onPointerDown($event)"
+  (pointermove)="onPointerMove($event)"
+  (pointerup)="onPointerUp()"
+  (keydown)="onKey($event)"
+>
+  <!-- Fundo: DEPOIS (100% do container, não muda tamanho) -->
+  <img [src]="afterSrc" [alt]="afterAlt" class="ba__img ba__img--after" />
+
+  <!-- Sobreposição: ANTES (100% do container, recortada pelo clip-path) -->
+  <img [src]="beforeSrc" [alt]="beforeAlt" class="ba__img ba__img--before" />
+
+  <!-- Traço/handle ancorados no mesmo divisor -->
+  <div class="ba__split"></div>
+
+  <button type="button" class="ba__handle" aria-label="Arrastar para comparar" (pointerdown)="onPointerDown($event)">
+    <span class="ba__chev ba__chev--left">←</span>
+    <span class="ba__chev ba__chev--right">→</span>
+  </button>
+
+  <div class="ba__badges">
+    <span class="ba__badge ba__badge--left">Antes</span>
+    <span class="ba__badge ba__badge--right">Depois</span>
+  </div>
+</div>

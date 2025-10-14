@@ -1,0 +1,206 @@
+@use 'variables' as *;
+@use 'grid' as *;
+
+/* =========================
+   TOKENS & HELPERS
+   ========================= */
+$sk-radius-12: 12px;
+$sk-radius-10: 10px;
+
+$sk-gap-6: 6px;
+$sk-gap-8: 8px;
+$sk-gap-10: 10px;
+$sk-gap-12: 12px;
+
+@mixin grid-stack($gap) {
+  display: grid;
+  gap: $gap;
+}
+@mixin bullets-base {
+  display: grid;
+  place-items: center;
+  margin-top: clamp(10px, 2vw, 16px);
+}
+
+/* =========================
+   Gaps utilitários
+   ========================= */
+.sk-gap-6 {
+  height: $sk-gap-6;
+}
+.sk-gap-8 {
+  height: $sk-gap-8;
+}
+.sk-gap-10 {
+  height: $sk-gap-10;
+}
+.sk-gap-12 {
+  height: $sk-gap-12;
+}
+
+/* =========================
+   WHY (split)
+   ========================= */
+.page-skeleton {
+  .section {
+    padding-block: clamp(28px, 5vw, 64px);
+  }
+  .row.align-center {
+    align-items: center;
+  }
+}
+.sk-copy {
+  margin-top: clamp(8px, 1vw, 12px);
+}
+
+/* =========================
+   TESTIMONIALS
+   ========================= */
+.sk-testimonials .sk-tcard {
+  border-radius: $sk-radius-12;
+  padding: 16px;
+  box-shadow: 0 6px 28px rgba(0, 0, 0, 0.05);
+  background: #fff;
+}
+
+/* =========================
+   ÁREAS
+   ========================= */
+.sk-areas .sk-pills {
+  display: flex;
+  gap: 8px 10px;
+  flex-wrap: wrap;
+  margin: 8px 0 4px;
+}
+
+/* =========================
+   WHY invertido
+   ========================= */
+.sk-why-invert .section__header {
+  margin-bottom: clamp(8px, 1vw, 12px);
+}
+
+/* =========================
+   DIVIDER
+   ========================= */
+.sk-divider {
+  padding-block: clamp(32px, 6vw, 72px);
+}
+
+/* =========================
+   FEATURES
+   ========================= */
+.sk-feature {
+  display: grid;
+  justify-items: start;
+}
+
+/* =========================
+   FAQ
+   ========================= */
+.sk-faq .section__header {
+  margin-bottom: clamp(10px, 2vw, 16px);
+}
+
+/* Mantém containers/cols dentro do slide na altura correta (igual regra real) */
+.banner__slide :is(.container, .row, .col-12, .col-md-6) {
+  height: 100%;
+  max-height: 100%;
+  overflow: visible;
+}
+
+/* =========================
+   BANNER (genérico)
+   ========================= */
+.sk-banner {
+  padding-block: clamp(24px, 5vw, 48px);
+  margin-bottom: 24px;
+  height: 720px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #dfdfdf;
+  padding: 0;
+}
+.sk-banner .sk-split {
+  @include grid-stack(clamp(16px, 4vw, 28px));
+}
+@media (min-width: 1100px) {
+  .sk-banner .sk-split {
+    grid-template-columns: 1.1fr 0.9fr;
+  }
+}
+.sk-banner .sk-dots {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-top: clamp(10px, 2vw, 16px);
+}
+
+/* =========================
+   OFERTAS (header + trilho)
+   ========================= */
+/* Header comum aos dois blocos (offers-skeleton e sk-offers) */
+.offers-skeleton .section__header {
+  margin-bottom: clamp(16px, 2vw, 24px);
+}
+
+/* Trilho e cartões (compartilhado) */
+.sk-offers {
+  .sk-carousel {
+    position: relative;
+  }
+
+  .sk-track {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 117px; /* igual ao real */
+  }
+  @media (max-width: $bp-lg) {
+    .sk-track {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+  }
+
+  .sk-offer-card {
+    display: grid;
+    grid-template-rows: auto 1fr;
+    gap: 12px;
+    padding: 8px 0;
+    border-radius: $sk-radius-12;
+    overflow: hidden;
+  }
+
+  .sk-content {
+    @include grid-stack(10px);
+  }
+  .sk-footer {
+    margin-top: 6px;
+  }
+
+  .sk-bullets {
+    @include bullets-base;
+  }
+}
+
+/* Compat: caso use a classe antiga offers-skeleton nos mesmos nós */
+.offers-skeleton {
+  .sk-offer-card {
+    border-radius: $sk-radius-12;
+    overflow: hidden;
+  }
+  .sk-content {
+    @include grid-stack(10px);
+  }
+  .sk-footer {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .sk-bullets {
+    @include bullets-base;
+  }
+}

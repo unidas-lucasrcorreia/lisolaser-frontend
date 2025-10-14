@@ -1,0 +1,139 @@
+@use 'variables' as *;
+
+@use 'sass:map';
+
+// container fixo no topo-direita
+.toast-toaster {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: $alert-z-index;
+  display: flex;
+  flex-direction: column;
+  gap: $alert-gap;
+  width: min(100vw - 32px, $alert-width);
+  pointer-events: none; // evita bloquear cliques no app
+}
+
+// card do toast
+.toast {
+  position: relative; // novo: precisamos para posicionar a barra
+  padding: $alert-padding-y $alert-padding-x calc(#{$alert-padding-y} + 6px); // reserva 6px p/ a barra
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: start;
+  gap: 10px;
+  border-radius: $alert-radius;
+  box-shadow: $alert-shadow;
+  color: $alert-text-color;
+  border: 1px solid transparent;
+  pointer-events: auto;
+  transform: translateY(-6px);
+  opacity: 0;
+  animation: toast-in 220ms ease-out forwards;
+
+  .toast__icon {
+    font-weight: 700;
+    line-height: 1;
+    opacity: 0.95;
+    padding-top: 2px;
+  }
+
+  .toast__content {
+    line-height: 1.35;
+    font-size: 14px;
+  }
+
+  .toast__close {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    color: inherit;
+    font-size: 18px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0 2px 0 8px;
+    opacity: 0.85;
+    transition: opacity 0.15s ease;
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  // barra de progresso (duração)
+  .toast__progress {
+    position: absolute;
+    left: 4px;
+    right: 0;
+    bottom: 0; // gruda no rodapé
+    height: 3px;
+    border-radius: 0 0 $alert-radius $alert-radius;
+    margin: 0; // remove a margem negativa que causava o “corte”
+    pointer-events: none; // não captura cliques
+    animation: toast-progress var(--toast-duration, 4000ms) linear forwards;
+    opacity: 0.9;
+  }
+}
+
+// variantes
+.toast--success {
+  background: $alert-success-bg;
+  border-color: $alert-success-border;
+  .toast__progress {
+    background: $alert-success-track;
+  }
+}
+
+.toast--warning {
+  background: $alert-warning-bg;
+  border-color: $alert-warning-border;
+  .toast__progress {
+    background: $alert-warning-track;
+  }
+}
+
+.toast--error {
+  background: $alert-error-bg;
+  border-color: $alert-error-border;
+  .toast__progress {
+    background: $alert-error-track;
+  }
+}
+
+.toast--info {
+  background: $alert-info-bg;
+  border-color: $alert-info-border;
+  .toast__progress {
+    background: $alert-info-track;
+  }
+}
+
+// animações
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toast-progress {
+  from {
+    width: 100%;
+  }
+  to {
+    width: 0%;
+  }
+}
+
+// responsivo: aproxima do canto em telas pequenas
+@media (max-width: 480px) {
+  .toast-toaster {
+    top: 10px;
+    right: 10px;
+    width: min(100vw - 20px, $alert-width);
+  }
+}

@@ -1,0 +1,58 @@
+<div class="hotspot-wrap" [style.--w.px]="image.width" [style.--h.px]="image.height">
+  <!-- Base em SVG: hotspots estáveis em qualquer resolução -->
+  <svg class="hotspot-svg" [attr.viewBox]="'0 0 ' + image.width + ' ' + image.height" preserveAspectRatio="xMidYMid meet" role="img" [attr.aria-label]="image.alt || ''">
+    <image [attr.href]="image.src" [attr.width]="image.width" [attr.height]="image.height" preserveAspectRatio="xMidYMid meet"></image>
+
+    <g class="dots">
+      @for (h of hotspots; track trackById($index, h)) {
+        <g
+          class="dot"
+          tabindex="0"
+          role="button"
+          [attr.aria-label]="h.title"
+          (click)="openHotspot(h)"
+          (keydown.enter)="openHotspot(h)"
+          (keydown.space)="openHotspot(h)"
+          [attr.transform]="dotTransform(h)"
+        >
+          <circle r="12.5" class="dot-ring" />
+          <circle r="4" class="dot-core" />
+        </g>
+      }
+    </g>
+  </svg>
+
+  <!-- Overlay local (escurece levemente) -->
+  @if (open()) {
+    <div class="overlay" (click)="close()" aria-hidden="true"></div>
+
+    <!-- Painel ancorado + seta -->
+    <div [class]="panelClass()" role="dialog" aria-modal="true" [style.left]="panelStyle().left" [style.top]="panelStyle().top" [style.transform]="panelStyle().transform">
+      <header class="panel__hd">
+        <div class="head-content">
+          <h3 class="panel__title">{{ active()?.title }}</h3>
+          @if (active()?.text) {
+            <p>
+              {{ active()?.text }}
+            </p>
+          }
+        </div>
+        <button type="button" class="panel__close" (click)="close()" aria-label="Fechar">×</button>
+      </header>
+
+      <div class="panel__body">
+        <label class="lbl">Unidade mais próxima</label>
+
+        <div class="panel__controls">
+          <app-unit-select [appearance]="'square'" [size]="'sm'" [onlyWithUno]="true" placeholder="Selecione..." (selectedUnit)="onUnitSelected($event)"> </app-unit-select>
+
+          <button type="button" class="cta cta--inline" (click)="schedule()">Agendar</button>
+        </div>
+
+        @if (showUnitError()) {
+          <div class="err">Selecione uma unidade para continuar.</div>
+        }
+      </div>
+    </div>
+  }
+</div>

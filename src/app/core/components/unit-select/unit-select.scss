@@ -1,0 +1,114 @@
+@use 'variables' as *;
+
+.unit-select {
+  position: relative;
+  z-index: 3;
+  input {
+    width: 100%;
+    padding: 14px 16px;
+    border: 1px solid $form-input-border;
+    border-radius: 999px;
+    background: #fff;
+    margin-bottom: 8px;
+    color: #171717;
+  }
+  .unit-input {
+    padding: 11px 48px;
+
+    background-image:
+      url('/images/icons/location-on.svg'),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none'><path d='M19.6 21L13.3 14.7C12.8 15.1 12.225 15.4167 11.575 15.65C10.925 15.8833 10.2333 16 9.5 16C7.68333 16 6.14583 15.3708 4.8875 14.1125C3.62917 12.8542 3 11.3167 3 9.5C3 7.68333 3.62917 6.14583 4.8875 4.8875C6.14583 3.62917 7.68333 3 9.5 3C11.3167 3 12.8542 3.62917 14.1125 4.8875C15.3708 6.14583 16 7.68333 16 9.5C16 10.2333 15.8833 10.925 15.65 11.575C15.4167 12.225 15.1 12.8 14.7 13.3L21 19.6L19.6 21ZM9.5 14C10.75 14 11.8125 13.5625 12.6875 12.6875C13.5625 11.8125 14 10.75 14 9.5C14 8.25 13.5625 7.1875 12.6875 6.3125C11.8125 5.4375 10.75 5 9.5 5C8.25 5 7.1875 5.4375 6.3125 6.3125C5.4375 7.1875 5 8.25 5 9.5C5 10.75 5.4375 11.8125 6.3125 12.6875C7.1875 13.5625 8.25 14 9.5 14Z' fill='%23979797'/> </svg>");
+    background-repeat: no-repeat, no-repeat;
+    background-position:
+      14px center,
+      calc(100% - 14px) center;
+    background-size: 24px, 24px;
+  }
+
+  .unit-options {
+    border-radius: 8px;
+    border: 1px solid #e9e9e9;
+    background: #fff;
+    position: absolute;
+    width: 100%;
+    margin-top: -5px;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: 220px;
+    overflow: auto;
+    z-index: 10000;
+    li {
+      cursor: pointer;
+      color: #403b3a;
+      font-size: 14px;
+      font-weight: 400;
+      strong {
+        font-weight: 600;
+      }
+      .dist {
+        position: relative;
+        display: block;
+        color: #ff6643;
+        font-weight: 700;
+        font-size: 12px;
+      }
+    }
+  }
+
+  // cor de erro (ou use sua variável do design system)
+  $error: #f00;
+
+  // Mixin (opcional) para padronizar
+  @mixin placeholder-color($c) {
+    &::placeholder {
+      color: $c;
+      opacity: 1;
+    } // padrão
+    &::-webkit-input-placeholder {
+      color: $c;
+    } // Chrome/Safari
+    &::-moz-placeholder {
+      color: $c;
+      opacity: 1;
+    } // Firefox
+    &:-ms-input-placeholder {
+      color: $c;
+    } // IE 10–11
+    &::-ms-input-placeholder {
+      color: $c;
+    } // Edge antigo
+  }
+
+  // Exemplo: quando o input tiver a classe de erro
+  input.is-invalid {
+    //   border-color: $error;
+
+    // placeholder vermelho
+    @include placeholder-color($error);
+  }
+
+  // Se você usa classes do Angular:
+  input.ng-invalid.ng-touched {
+    //   border-color: $error;
+    @include placeholder-color($error);
+  }
+
+  // (opcional) só aplica quando realmente está mostrando placeholder
+  // evita mexer em campos já preenchidos
+  input.is-invalid:placeholder-shown {
+    @include placeholder-color($error);
+  }
+}
+
+:host.appearance-square .unit-select input {
+  border-radius: 0; /* deixa quadradinho */
+  padding: 12px 14px;
+  background-image: none; /* remove ícones embutidos do pill */
+}
+
+:host.size-sm .unit-select input {
+  padding: 10px 12px; /* compacto */
+  font-size: 14px;
+}

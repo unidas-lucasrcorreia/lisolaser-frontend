@@ -1,0 +1,306 @@
+<h1 class="sr-only">Agendamento — Lisô Laser</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <nav class="breadcrumb" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+        <ol class="breadcrumb__list" role="list">
+          <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a [routerLink]="['/']" itemprop="item">
+              <span itemprop="name">Home</span>
+            </a>
+            <meta itemprop="position" content="1" />
+          </li>
+
+          <li class="breadcrumb__sep" aria-hidden="true">/</li>
+
+          <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+            <a (click)="step.set(1)" itemprop="item">
+              <span itemprop="name">Agendamento</span>
+            </a>
+            <meta itemprop="position" content="2" />
+          </li>
+
+          @if (step() === 2 || step() === 3) {
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+
+            <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+              <a (click)="step.set(2)" itemprop="item">
+                <span itemprop="name">Unidade e Data</span>
+              </a>
+              <meta itemprop="position" content="3" />
+            </li>
+          }
+
+          @if (step() === 3) {
+            <li class="breadcrumb__sep" aria-hidden="true">/</li>
+
+            <li class="breadcrumb__item" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+              <span itemprop="name">Dados Pessoais</span>
+              <meta itemprop="position" content="4" />
+            </li>
+          }
+        </ol>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<ng-template #unitListTpl let-fg="fg" let-showSelected="showSelected">
+  <div [formGroup]="fg">
+    <div class="search search--with-icon">
+      <input type="search" formControlName="search" placeholder="Procure por cidade, CEP, estado ou nome" />
+    </div>
+
+    @if (loading) {
+      <ul class="unit-list unit-list--scroll" role="list" aria-hidden="true">
+        @for (i of skeletonUnits; track i) {
+          <li role="listitem">
+            <article class="unit-card is-skeleton">
+              <div class="media">
+                <app-skeleton variant="rect" [width]="'100%'" [height]="112" [radius]="8"></app-skeleton>
+              </div>
+              <div class="info">
+                <app-skeleton variant="rect" [width]="'46%'" [height]="14" [radius]="4"></app-skeleton>
+                <div class="sk-gap-6"></div>
+                <app-skeleton variant="rect" [width]="'92%'" [height]="12" [radius]="4"></app-skeleton>
+                <div class="sk-gap-6"></div>
+                <app-skeleton variant="rect" [width]="'70%'" [height]="12" [radius]="4"></app-skeleton>
+              </div>
+              <div class="actions">
+                <app-skeleton variant="rect" [width]="'96px'" [height]="28" [radius]="999"></app-skeleton>
+              </div>
+            </article>
+          </li>
+        }
+      </ul>
+    } @else {
+      <ul class="unit-list unit-list--scroll" role="list">
+        @for (u of filteredUnits; track u.id) {
+          <li role="listitem">
+            <article class="unit-card" [class.is-selected]="showSelected ? selectedUnit?.id === u.id : false" (click)="selectUnit(u)">
+              <img [src]="imgOf(u)" alt="" />
+              <div class="info">
+                @if (distanceFromCep(u); as dist) {
+                  <small class="muted">{{ dist }}</small>
+                }
+                <h3 class="title">{{ u.data.name }}</h3>
+                <p class="address">
+                  <img src="/images/icons/schedule-location.svg" alt="" />
+                  {{ addressLine(u) }} — {{ u.data.address?.city }} • {{ u.data.address?.state }}
+                </p>
+
+                <div class="footer-line">
+                  @if (getInstagram(u)) {
+                    <small class="social">
+                      <img src="/images/icons/schedule-instagram.svg" alt="" />
+                      {{ getInstagram(u)! }}
+                    </small>
+                  }
+
+                  <div class="actions">
+                    <button type="button" class="btn-link" (click)="$event.stopPropagation(); selectUnit(u)">
+                      {{ selectedUnit?.id === u.id ? 'Selecionada' : 'Selecionar' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </li>
+        }
+      </ul>
+    }
+  </div>
+</ng-template>
+
+<section class="section" aria-labelledby="schedule-heading">
+  @if (step() === 1 || step() === 2) {
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-12 col-lg-6 col-xxl-5 col-units" [class.hide-on-mobile-step2]="step() === 2">
+          <header class="section__header">
+            <h2 id="unit-heading" class="title-xl">Selecione a unidade:</h2>
+            <p class="intro light">Onde você quer agendar?</p>
+          </header>
+
+          <ng-container [ngTemplateOutlet]="unitListTpl" [ngTemplateOutletContext]="{ fg: unitForm, showSelected: step() >= 2 }"> </ng-container>
+        </div>
+
+        @if (step() === 2) {
+          <div class="col-12 offset-lg-1 col-lg-4" [formGroup]="scheduleForm" aria-live="polite">
+            @if (step() === 2 && selectedUnit) {
+              <div class="only-mobile step2-selected-header">
+                <h2 id="unit-heading" class="title-xl">Unidade selecionada:</h2>
+
+                <article class="selected-compact">
+                  <img [src]="imgOf(selectedUnit!)" alt="" />
+                  <div class="info">
+                    <h3 class="title">{{ selectedUnit.data.name }}</h3>
+                    <p class="address">
+                      <img src="/images/icons/schedule-location.svg" alt="" />
+                      {{ addressLine(selectedUnit) }} — {{ selectedUnit.data.address?.city }} • {{ selectedUnit.data.address?.state }}
+                    </p>
+                  </div>
+                </article>
+
+                <button type="button" class="back" (click)="changeUnit()">
+                  <img src="/images/icons/back.svg" alt="" />
+                  Trocar unidade
+                </button>
+              </div>
+            }
+
+            <header class="section__header big-gap">
+              <h2 id="schedule-heading" class="title-xl left-align">Quando você pode?</h2>
+              <p class="intro light">Selecione data e horário</p>
+            </header>
+
+            <div class="calendar">
+              <div class="cal-head">
+                <button class="nav" type="button" (click)="prevMonth()" [disabled]="disablePrevMonth" aria-label="Mês anterior">‹</button>
+                <div class="cal-title">{{ viewingTitle }}</div>
+                <button class="nav" type="button" (click)="nextMonth()" [disabled]="disableNextMonth" aria-label="Próximo mês">›</button>
+              </div>
+
+              <div class="cal-grid cal-weekdays"><span>Seg</span><span>Ter</span><span>Qua</span><span>Qui</span><span>Sex</span><span>Sab</span><span>Dom</span></div>
+
+              <div class="cal-grid cal-days">
+                @for (week of calendar; track $index) {
+                  @for (day of week; track day.iso) {
+                    @if (day.inMonth) {
+                      <button
+                        type="button"
+                        class="cal-day"
+                        [class.today]="day.isToday"
+                        [class.selected]="day.selected"
+                        [class.hasAvail]="day.hasAvailability"
+                        [class.past]="day.isPast || day.isAfterMax"
+                        [disabled]="day.isPast || day.isAfterMax"
+                        (click)="!(day.isPast || day.isAfterMax) && selectDay(day)"
+                        [attr.aria-pressed]="day.selected ? 'true' : 'false'"
+                        [title]="day.hasAvailability ? 'Disponível' : 'Sem horários'"
+                      >
+                        {{ day.date.getDate() }}
+                      </button>
+                    } @else {
+                      <span class="cal-spacer" aria-hidden="true"></span>
+                    }
+                  }
+                }
+              </div>
+            </div>
+
+            <div class="times">
+              <select id="time" formControlName="time" [disabled]="timeCtrl.disabled || loadingHours()">
+                <option value="" disabled>
+                  @if (loadingHours()) {
+                    <option value="" disabled selected>Carregando...</option>
+                  } @else {
+                    <option value="" disabled selected>Horários disponíveis</option>
+                  }
+                </option>
+                @for (t of times; track t.hour) {
+                  <option [value]="t.hour">{{ t.hour }}</option>
+                }
+              </select>
+            </div>
+
+            <div class="row-actions">
+              <button type="button" [disabled]="timeCtrl.disabled || loadingHours()" class="btn-primary btn-lg" (click)="continueToCustomer()">Continuar</button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</section>
+
+<section class="section" aria-labelledby="summary-heading">
+  @if (step() === 3) {
+    <div class="container">
+      <div class="row gap-xxl">
+        <div class="col-12 col-xl-6">
+          <header class="section__header">
+            <h2 id="summary-heading" class="title-xl">Resumo do agendamento</h2>
+            <p class="intro light">Unidade selecionada e horário</p>
+          </header>
+
+          <article class="summary-card">
+            <img class="unit-image" [src]="imgOf(selectedUnit!)" alt="" />
+            <div class="summary-info">
+              <h3 class="title">{{ selectedUnit?.data?.name }}</h3>
+              <p class="address">
+                <img src="/images/icons/schedule-location.svg" alt="" />
+                {{ selectedUnit ? addressLine(selectedUnit) : '' }}
+                — {{ selectedUnit?.data?.address?.city }} • {{ selectedUnit?.data?.address?.state }}
+              </p>
+              @if (selectedUnit && getInstagram(selectedUnit)) {
+                <small class="social">
+                  <img src="/images/icons/schedule-instagram.svg" alt="" />
+                  {{ getInstagram(selectedUnit)! }}
+                </small>
+              }
+            </div>
+
+            <div class="summary-footer">
+              <div class="pill">
+                <img src="/images/icons/calendar.svg" alt="" />
+                {{ toISODate(scheduleForm.controls.date.value) }}
+              </div>
+              <div class="pill">
+                <img src="/images/icons/hours.svg" alt="" />
+                {{ scheduleForm.controls.time.value }}
+              </div>
+            </div>
+          </article>
+
+          <div class="back" (click)="backToSchedule()">
+            <img src="/images/icons/back.svg" alt="" />
+            Alterar agendamento
+          </div>
+        </div>
+
+        <div class="col-12 col-xl-6">
+          <header class="section__header">
+            <h3 class="title-xl">Seus dados</h3>
+            <p class="intro light">Preencha com seus dados:</p>
+          </header>
+
+          <form [formGroup]="customerForm" class="customer-form card" (ngSubmit)="submitSchedule()">
+            <div class="form-control">
+              <label for="name">Nome</label>
+              <input id="name" type="text" formControlName="name" placeholder="Seu nome" appTouchOnBlur />
+              <app-field-errors [control]="customerForm.controls.name" label="Nome"></app-field-errors>
+            </div>
+
+            <div class="form-control">
+              <label for="phone">Telefone</label>
+              <input id="phone" type="text" mask="(00) 00000-0000" formControlName="phone" placeholder="(11) 90000-0000" appTouchOnBlur />
+              <app-field-errors [control]="customerForm.controls.phone" label="Telefone"></app-field-errors>
+            </div>
+
+            <div class="row-actions">
+              <button type="submit" class="btn-primary btn-lg">
+                {{ submitting() ? 'Confirmando...' : 'Confirmar' }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  }
+</section>
+
+@if (showSucess()) {
+  <section class="section success-wall" aria-labelledby="success-wall">
+    <div class="success-box">
+      <ng-lottie style="margin: 0 auto" width="125px" [options]="options" />
+      <div class="title">Agendamento confirmado!</div>
+      <div class="subtitle">Seu horário foi reservado com sucesso. Estamos te esperando para cuidar de você!</div>
+      <a [routerLink]="['/']" routerLinkActive="router-link-active" class="cta">
+        Voltar para a home
+        <img src="/images/icons/arrow-right.svg" alt="" />
+      </a>
+    </div>
+  </section>
+}

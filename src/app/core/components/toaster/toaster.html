@@ -1,0 +1,38 @@
+<section class="toast-toaster" role="region" aria-label="Notificações">
+  @for (t of toasts(); track t.id) {
+    <article
+      class="toast"
+      [class.toast--success]="t.type === 'success'"
+      [class.toast--error]="t.type === 'error'"
+      [class.toast--warning]="t.type === 'warning'"
+      [class.toast--info]="t.type === 'info'"
+      role="alert"
+      [attr.aria-live]="t.type === 'error' ? 'assertive' : 'polite'"
+    >
+      <div class="toast__icon" aria-hidden="true">
+        @switch (t.type) {
+          @case ('success') {
+            <span aria-hidden="true" title="Sucesso">✓</span>
+          }
+          @case ('error') {
+            <span aria-hidden="true" title="Erro">⛔</span>
+          }
+          @case ('warning') {
+            <span aria-hidden="true" title="Aviso">⚠</span>
+          }
+          @default {
+            <span aria-hidden="true" title="Informação">ℹ</span>
+          }
+        }
+      </div>
+
+      <div class="toast__content">{{ t.message }}</div>
+
+      <button type="button" class="toast__close" aria-label="Fechar notificação" (click)="dismiss(t.id)">×</button>
+
+      @if (t.duration > 0) {
+        <div class="toast__progress" [style.--toast-duration.ms]="t.duration"></div>
+      }
+    </article>
+  }
+</section>

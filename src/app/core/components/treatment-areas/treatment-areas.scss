@@ -1,0 +1,269 @@
+@use 'variables' as *;
+@use 'font' as *;
+@use 'grid' as *;
+
+/* =========================================================
+   Treatment areas — responsivo e tipografia fluida
+   ========================================================= */
+
+/* Tokens locais p/ escala tipográfica (mantêm os tamanhos de desktop) */
+$ta-intro-min: 16px;
+$ta-intro-vw: 2.2vw;
+$ta-intro-max: 24px;
+$ta-h2-min: 24px;
+$ta-h2-vw: 4.3vw;
+$ta-h2-max: 40px;
+$ta-copy-min: 16px;
+$ta-copy-vw: 1.8vw;
+$ta-copy-max: 24px;
+$chip-fz-min: 13px;
+$chip-fz-vw: 1.25vw;
+$chip-fz-max: 16px;
+
+#treatment-areas.section.treatment-areas {
+  position: relative;
+  padding: 58px 0;
+
+  .controls {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 8px; /* respiro leve entre header/chips */
+  }
+
+  .element {
+    position: absolute;
+    left: 57%;
+
+    @media (max-width: $bp-md) {
+      left: 10%;
+      max-width: 80%;
+    }
+  }
+
+  /* ---------- Header ---------- */
+  .ta-header {
+    text-align: left;
+    margin-bottom: 0;
+
+    .intro {
+      color: $color-primary-super-light;
+      font-size: clamp($ta-intro-min, $ta-intro-vw, $ta-intro-max);
+      font-weight: 400;
+      line-height: 1.5; /* 36px no desktop */
+    }
+
+    h2 {
+      margin: 0.25rem 0 1rem;
+      color: $text-color;
+      font-weight: 700;
+      line-height: 1.2; /* 48px no desktop */
+      font-size: clamp($ta-h2-min, $ta-h2-vw, $ta-h2-max);
+      letter-spacing: 0.01em;
+    }
+  }
+
+  /* ---------- Chips ---------- */
+  .ta-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 16px; /* melhor quebra em 2 linhas */
+    margin: 0.5rem 0 1rem;
+  }
+
+  .chip {
+    appearance: none;
+    border: 0;
+    border-radius: 999px;
+    padding: clamp(10px, 1.2vw, 14px) clamp(12px, 1.6vw, 16px);
+    background: $color-primary;
+    color: $color-white;
+    font-family: $font-epilogue;
+    font-weight: 700;
+    line-height: 1.1;
+    text-transform: uppercase;
+    font-size: clamp($chip-fz-min, $chip-fz-vw, $chip-fz-max);
+    transition:
+      background-color 0.2s ease,
+      color 0.2s ease,
+      box-shadow 0.2s ease;
+
+    &--outline {
+      background: transparent;
+      color: $grey-button;
+      border: 0.5px solid $grey-button;
+    }
+
+    &.is-active {
+      background: $color-primary;
+      color: $color-white;
+      box-shadow: 0 0 0 2px rgba($color-primary, 0.15);
+
+      &.chip--outline {
+        background: $color-primary;
+        color: $color-white;
+        border-color: $color-primary;
+      }
+    }
+
+    /* Melhor foco/teclado sem alterar estética */
+    &:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba($color-primary, 0.22);
+    }
+  }
+
+  /* ---------- Descrição ---------- */
+  .ta-description {
+    margin-top: 1rem;
+    margin-bottom: 50px;
+    max-width: 25vw; /* mantém layout do desktop */
+    color: $grey-text;
+    line-height: 1.5; /* 36px no desktop */
+    font-size: clamp($ta-copy-min, $ta-copy-vw, $ta-copy-max);
+
+    /* comportamento original: oculta em telas <= $bp-lg */
+    @media (max-width: $bp-lg) {
+      display: none;
+    }
+  }
+
+  /* ---------- CTA ---------- */
+  .cta {
+    padding: clamp(12px, 1.4vw, 18px);
+    border-radius: 100px;
+    max-width: 70%;
+    line-height: 1.1;
+
+    /* mobile: CTA full-width p/ não “quebrar” linha */
+    @media (max-width: $bp-lg) {
+      display: none;
+    }
+  }
+
+  /* ---------- Figura / imagem ---------- */
+  .ta-figure {
+    position: relative;
+    min-height: 75vh;
+
+    @media (max-width: $bp-md) {
+      min-height: 420px;
+    }
+  }
+
+  .ta-image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    object-position: center bottom;
+    opacity: 0;
+    transform: translateY(6px);
+    animation: ta-fade 0.35s ease forwards;
+  }
+
+  @keyframes ta-fade {
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* ---------- Pins (mantidos, apenas limpos) ---------- */
+  .ta-pin {
+    position: absolute;
+    display: grid;
+    place-items: center;
+
+    &::after {
+      content: '';
+      width: 8px;
+      height: 8px;
+      /* estilos reais comentados foram mantidos desativados para não alterar visual */
+    }
+  }
+
+  /* ---------- Marca d'água ---------- */
+  .ta-watermark {
+    position: absolute;
+    inset: 4% 6% auto 10%;
+    width: 60%;
+    aspect-ratio: 1 / 1;
+    background: radial-gradient(50% 50% at 50% 50%, rgba($color-primary, 0.08) 0%, rgba($color-primary, 0) 60%) no-repeat;
+    filter: blur(0.3px);
+    pointer-events: none;
+  }
+
+  /* =====================================================
+     Ajustes por breakpoint (mobile-first)
+     ===================================================== */
+
+  /* Tablet/desktop pequenos: cópia com largura mais confortável */
+  @media (max-width: $bp-lg) {
+    .controls {
+      gap: 10px;
+    }
+    .ta-chip-row {
+      gap: 10px 12px;
+    }
+  }
+  @media (max-width: $bp-md) {
+    .ta-chip-row {
+      margin: 8px auto;
+    }
+  }
+
+  /* Mobile: hierarquia e toques maiores */
+  @media (max-width: $bp-md) {
+    padding: 36px 0;
+
+    .ta-header {
+      .intro {
+        font-weight: 500;
+      }
+      h2 {
+        letter-spacing: 0.005em;
+      }
+    }
+
+    .ta-chip-row {
+      margin-bottom: 0.75rem;
+    }
+
+    .chip {
+      padding: 10px 12px; /* área de toque segura */
+      border-radius: 999px;
+    }
+  }
+}
+
+#treatment-areas .ta-chip-mobile {
+  display: none;
+}
+
+/* Mobile: esconde chips originais e mostra os duplicados embaixo da imagem */
+@media (max-width: 767px) {
+  #treatment-areas .controls .ta-chip-row {
+    display: none; /* esconde as linhas originais só no mobile */
+  }
+
+  #treatment-areas .ta-chip-mobile {
+    display: flex;
+    flex-direction: column;
+    margin: 25px 0 0;
+  }
+
+  #treatment-areas .ta-chip-mobile .ta-chip-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+  }
+
+  #treatment-areas .ta-chip-mobile .chip {
+    min-height: 40px;
+    padding-inline: 12px;
+    border-radius: 999px;
+  }
+}

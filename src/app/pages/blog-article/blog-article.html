@@ -1,0 +1,91 @@
+<section class="section blog-article">
+  @if (loading()) {
+    <article class="post is-loading" aria-hidden="true">
+      <header class="post__header">
+        <div class="container header-content">
+          <div class="row">
+            <div class="col-12 col-xl-10 offset-xl-1">
+              <app-skeleton variant="rect" [width]="'140px'" [height]="12" [radius]="4"></app-skeleton>
+              <div class="sk-gap-8"></div>
+
+              <app-skeleton variant="rect" [width]="'70%'" [height]="44" [radius]="6"></app-skeleton>
+              <div class="sk-gap-8"></div>
+              <app-skeleton variant="rect" [width]="'52%'" [height]="44" [radius]="6"></app-skeleton>
+              <div class="sk-gap-14"></div>
+
+              <app-skeleton variant="rect" [width]="'68%'" [height]="18" [radius]="6"></app-skeleton>
+            </div>
+          </div>
+        </div>
+
+        <figure class="hero-wrap">
+          <app-skeleton variant="rect" [width]="'100%'" height="670px" [aspectRatio]="'21/9'" [radius]="14"></app-skeleton>
+        </figure>
+      </header>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-lg-8 offset-lg-2 col-xl-8 offset-xl-2">
+            <section class="post__content">
+              <app-skeleton variant="text" [lines]="5" [lineHeight]="16" [gap]="10" [lastLineWidth]="'60%'" [width]="'100%'" [radius]="6"></app-skeleton>
+
+              <div class="sk-gap-18"></div>
+
+              <app-skeleton variant="rect" [width]="'35%'" [height]="22" [radius]="6"></app-skeleton>
+              <div class="sk-gap-10"></div>
+
+              <app-skeleton variant="text" [lines]="4" [lineHeight]="16" [gap]="10" [lastLineWidth]="'62%'" [width]="'100%'" [radius]="6"></app-skeleton>
+
+              <div class="sk-gap-18"></div>
+
+              <app-skeleton variant="rect" [width]="'100%'" [height]="300" [radius]="12"></app-skeleton>
+
+              <div class="sk-gap-18"></div>
+
+              <app-skeleton variant="text" [lines]="6" [lineHeight]="16" [gap]="10" [lastLineWidth]="'58%'" [width]="'100%'" [radius]="6"></app-skeleton>
+            </section>
+          </div>
+        </div>
+      </div>
+    </article>
+  }
+
+  @if (error()) {
+    <div class="error">{{ error() }}</div>
+  }
+
+  @if (!loading() && !error() && post()) {
+    @let p = post();
+
+    <article class="post">
+      <header class="post__header">
+        <div class="container">
+          <div class="row">
+            <div class="col-12">
+              @if (p!.subtitle) {
+                <p class="subtitle">{{ p!.subtitle }}</p>
+              }
+              <h1 class="title-xl">{{ p!.title }}</h1>
+
+              @if (p!.featuredText) {
+                <p class="featured">{{ p!.featuredText }}</p>
+              }
+            </div>
+          </div>
+        </div>
+
+        @if (img(p!)) {
+          <img class="hero" [src]="img(p!)!" [attr.alt]="p!.title || ''" />
+        }
+      </header>
+
+      <div class="container">
+        <div class="row">
+          <div class="col-12 col-lg-6 offset-lg-3 col-xl-8 offset-xl-2">
+            <section class="post__content" [innerHTML]="safeContent()"></section>
+          </div>
+        </div>
+      </div>
+    </article>
+  }
+</section>

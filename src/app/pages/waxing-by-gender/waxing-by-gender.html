@@ -1,0 +1,243 @@
+@defer (when !loading()) {
+  @let g = genderFromRoute();
+  @let h = head();
+  @let ab = aboutArea();
+  @let rs = results();
+  @let vd = video();
+  @let ls = laser();
+
+  <!-- HEAD -->
+  <section
+    id="locations-head"
+    class="section locations-head"
+    [class.mens-header]="g === 'masculino'"
+    [style.--head-bg]="h?.image ? 'url(' + imgOf(h?.image) + ')' : 'none'"
+    aria-label="Depilação a laser por gênero"
+  >
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-12">
+          <header class="section__header">
+            <h1 id="locations-heading" [innerHTML]="h?.title"></h1>
+            <p class="subtitle" [innerHTML]="h?.text"></p>
+            <a [routerLink]="h?.ctaLink" [class.mens-button]="g === 'masculino'" class="btn btn-primary cta">
+              {{ h?.ctaLabel }}
+            </a>
+          </header>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÁREAS DE TRATAMENTO -->
+  <app-treatment-areas [initialGender]="g || 'feminino'"></app-treatment-areas>
+
+  <!-- SOBRE A ÁREA -->
+  <section id="sessions-section" class="section" aria-labelledby="sessions-heading">
+    <img class="element-logo" src="/images/element-primary.png" alt="" />
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-5 offset-lg-1">
+          <div class="title">{{ ab?.title || 'Lorem Ipsum sit dolor' }}</div>
+          <p>{{ ab?.text }}</p>
+        </div>
+        <div class="col-12 col-lg-5 offset-lg-1 img-col">
+          <img [src]="imgOf(ab?.image?.[0])" alt="" loading="lazy" decoding="async" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section id="results" class="results section" aria-labelledby="results-title">
+    <div class="container">
+      <div class="row results__row">
+        <div class="col-12 col-lg-5 offset-lg-1 col-media">
+          <app-before-after
+            [beforeSrc]="imgOf(rs?.beforeImage?.[0]) || '/images/results/antes.png'"
+            [afterSrc]="imgOf(rs?.afterImage?.[0]) || '/images/results/depois.png'"
+            beforeAlt="Antes"
+            afterAlt="Depois"
+            [start]="50"
+          >
+          </app-before-after>
+          <div class="obs">* Imagens meramente ilustrativas</div>
+        </div>
+
+        <div class="col-12 col-lg-4 offset-lg-1 col-text">
+          <header class="results__header">
+            <p class="kicker">{{ rs?.preTitle || 'Lorem Ipsum sit dolor' }}</p>
+            <h2 id="results-title">{{ rs?.title || 'Resultados reais' }}</h2>
+          </header>
+          <p class="results__text">{{ rs?.text }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VÍDEO -->
+  <section id="video-section" class="section" aria-labelledby="video-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-lg-5 offset-lg-1">
+          <header class="section__header">
+            <p class="intro light">{{ vd?.preTitle || 'Lorem ipsum' }}</p>
+            <h2 id="video-heading">{{ vd?.title || 'Lorem Ipsum' }}</h2>
+            <p class="video-text">{{ vd?.text }}</p>
+          </header>
+        </div>
+
+        <div class="col-12 col-lg-4 offset-lg-1 col-text">
+          @defer (on viewport) {
+            <video controls [poster]="imgOf(vd.cover?.[0])" preload="metadata" class="video-cover">
+              <source [src]="imgOf(vd?.video?.[0])" />
+              Seu navegador não suporta vídeo HTML5.
+            </video>
+          } @placeholder {
+            <div class="media-skeleton" aria-hidden="true"></div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LASER -->
+  <section id="laser-section" class="section" aria-labelledby="laser-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-5 col-xl-5 col-xxl-4 img-col">
+          <img [src]="imgOf(ls?.image?.[0])" alt="" />
+        </div>
+        <div class="col-12 col-md-7 col-xl-6 col-xxl-5 offset-xl-1 laser-text">
+          <div class="kicker">{{ ls?.preTitle || 'Lorem Ipsum sit dolor' }}</div>
+          <div class="title">{{ ls?.title || 'Lorem Ipsum sit dolor' }}</div>
+          <p>{{ ls?.text }}</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" class="section" aria-labelledby="faq-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <header class="section__header">
+            <h2 id="faq-heading">{{ faqSection()?.title || 'Perguntas Frequentes' }}</h2>
+          </header>
+        </div>
+
+        <div class="col-12 col-md-10 offset-md-1">
+          @if (loadingFaq()) {
+            <div class="faq">
+              @for (i of [0, 1, 2, 3]; track i) {
+                <details aria-hidden="true" open class="is-skeleton">
+                  <summary><span class="skl" style="width: 60%"></span></summary>
+                  <p><span class="skl" style="width: 95%"></span></p>
+                </details>
+              }
+            </div>
+          } @else {
+            @if (faqs().length) {
+              <div class="faq">
+                @for (item of faqs(); track item.question) {
+                  <details>
+                    <summary>{{ item.question }}</summary>
+                    <p>{{ item.answer }}</p>
+                  </details>
+                }
+              </div>
+            } @else {
+              <p class="muted">Nenhuma pergunta frequente disponível.</p>
+            }
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+} @placeholder {
+  <!-- SKELETON GLOBAL ENQUANTO O CMS CARREGA -->
+  <section class="section sk-section sk-hero">
+    <div class="container">
+      <div class="row hero__row">
+        <div class="col-12 col-md-6 col-xxl-5 offset-xxl-1">
+          <div class="sk-line sk-h1"></div>
+          <div class="sk-line sk-sub w-70"></div>
+          <div class="sk-line sk-sub w-55"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ÁREA “SOBRE A ÁREA” (duas colunas) -->
+  <section class="section sk-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-5 offset-md-1">
+          <div class="sk-line sk-title w-60"></div>
+          <div class="sk-stack">
+            <div class="sk-line sk-text w-95"></div>
+            <div class="sk-line sk-text w-88"></div>
+            <div class="sk-line sk-text w-80"></div>
+          </div>
+        </div>
+        <div class="col-12 col-md-4 offset-md-1">
+          <div class="sk-media sk-portrait"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RESULTADOS -->
+  <section class="section sk-section">
+    <div class="container">
+      <div class="row results__row">
+        <div class="col-12 col-lg-5 offset-lg-1">
+          <div class="sk-media sk-photo"></div>
+        </div>
+        <div class="col-12 col-lg-4 offset-lg-1">
+          <div class="sk-line sk-kicker w-40"></div>
+          <div class="sk-line sk-title w-65"></div>
+          <div class="sk-stack">
+            <div class="sk-line sk-text w-95"></div>
+            <div class="sk-line sk-text w-88"></div>
+            <div class="sk-line sk-text w-80"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VÍDEO (título central + mídia 16:9) -->
+  <section class="section sk-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-10 offset-md-1">
+          <div class="sk-line sk-kicker w-28 mx-auto"></div>
+          <div class="sk-line sk-title w-40 mx-auto"></div>
+          <div class="sk-media sk-rect mt-16"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LASER -->
+  <section class="section sk-section">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-4 img-col">
+          <div class="sk-media sk-portrait"></div>
+        </div>
+        <div class="col-12 col-md-5 offset-md-1">
+          <div class="sk-line sk-kicker w-35"></div>
+          <div class="sk-line sk-title w-60"></div>
+          <div class="sk-stack">
+            <div class="sk-line sk-text w-95"></div>
+            <div class="sk-line sk-text w-90"></div>
+            <div class="sk-line sk-text w-82"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+}

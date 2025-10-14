@@ -1,0 +1,743 @@
+@use 'variables' as *;
+@use 'grid' as *;
+
+/* =========================================================
+   Helpers & tokens locais (sem alterar o visual)
+   ========================================================= */
+
+$bp-sm-max: 767px;
+$bp-md-min: 768px;
+$bp-lg-max: 1199px;
+
+@mixin clamp-fz($min, $vw, $max) {
+  font-size: clamp(#{$min}, #{$vw}, #{$max});
+}
+
+@mixin section-pad($t: 100px, $b: 100px) {
+  padding: $t 0 $b;
+}
+
+@mixin title-block($color, $size: 40px, $weight: 800, $mb: 8px) {
+  color: $color;
+  font-size: $size;
+  font-style: normal;
+  font-weight: $weight;
+  margin-bottom: $mb;
+}
+
+@mixin paragraph($color, $size, $lh: normal, $weight: 400) {
+  color: $color;
+  font-size: $size;
+  font-style: normal;
+  font-weight: $weight;
+  @if $lh != normal {
+    line-height: $lh;
+  }
+}
+
+%media-cover {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  border: 0;
+}
+
+/* =========================================================
+   Hero / Head
+   ========================================================= */
+
+.locations-head {
+  // background-image: var(--head-bg);
+  display: flex;
+  align-items: center;
+  background-image:
+    linear-gradient(
+      180deg,
+      rgba(196, 196, 196, 0.392) 0%,
+      /* .49 × .8 = .392 */ rgba(169, 169, 169, 0.296) 27.4%,
+      /* .37 × .8 = .296 */ rgba(85, 77, 69, 0.704) 71.63%,
+      /* .88 × .8 = .704 */ rgba(37, 37, 36, 0.8) 100%
+    ),
+    var(--head-bg);
+  background-position: center center;
+  background-size: cover;
+  color: $color-white;
+  padding: 86px 0;
+  position: relative;
+  overflow: hidden;
+  min-height: 450px;
+
+  @media (max-width: $bp-md) {
+    background-position: 66% 55%;
+  }
+
+  .section__header {
+    text-align: left;
+
+    h1 {
+      margin: 0 0 0.6rem;
+      font-weight: 800;
+      line-height: 1.1;
+      @include clamp-fz(28px, 4vw, 48px);
+      letter-spacing: 0.01em;
+      color: $color-white;
+      text-shadow: 0 2px 14px rgba(0, 0, 0, 0.15);
+    }
+
+    .subtitle {
+      margin: 0;
+      // max-width: 40ch;
+      opacity: 1;
+      @include clamp-fz(14px, 1.6vw, 18px);
+      line-height: 1.6;
+      margin-bottom: 26px;
+    }
+
+    .btn {
+      text-transform: none;
+      &.mens-button {
+        background-color: #252524;
+      }
+    }
+  }
+
+  &.mens-header {
+    background-image: linear-gradient(180deg, rgba(196, 196, 196, 0) 0%, rgba(169, 169, 169, 0) 27.4%, rgba(255, 102, 67, 0.33) 71.63%, #252524 100%), var(--head-bg);
+  }
+}
+
+/* =========================================================
+   Results
+   ========================================================= */
+
+.results {
+  padding-block: clamp(32px, 6vw, 90px);
+
+  .results__row {
+    align-items: center;
+  }
+
+  .kicker {
+    color: $color-darker;
+    font-size: 20px;
+    margin: 0 0 20px;
+    font-weight: 600;
+  }
+
+  h2 {
+    color: $color-primary;
+    font-weight: 800;
+    line-height: 1.1;
+    font-size: 40px;
+    margin: 0 0 32px;
+  }
+
+  .results__text {
+    color: $color-darker;
+    @include clamp-fz(16px, 1.6vw, 18px);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  app-before-after {
+    display: block;
+    max-width: 100%;
+    margin-bottom: 8px;
+  }
+  .obs {
+    font-size: clamp(14px, 1.5vw, 18px);
+    color: $grey-button;
+  }
+}
+
+/* =========================================================
+   Vídeo
+   ========================================================= */
+
+.video-cover {
+  @extend %media-cover;
+  border-radius: 12px;
+  object-fit: cover;
+  aspect-ratio: 158 / 281;
+  max-height: 670px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .video-cover {
+    animation: none;
+  }
+}
+
+#video-section.section {
+  @include section-pad(100px, 100px);
+  .row {
+    align-items: center;
+    display: flex;
+  }
+  .section__header {
+    margin-bottom: 0;
+
+    .intro {
+      @include paragraph($grey-text-dark, 24px, 36px);
+      margin-bottom: 0;
+      font-size: 20px;
+      font-size: 20px;
+      margin-bottom: 8px;
+      font-weight: 600;
+    }
+
+    h2 {
+      @include title-block($color-primary, 40px, 700, 40px);
+      line-height: 48px;
+      margin-bottom: 28px;
+    }
+    .video-text {
+      @include paragraph($grey-text-dark, 24px, 36px);
+      color: #666;
+    }
+  }
+}
+
+/* =========================================================
+   Sessions
+   ========================================================= */
+
+#sessions-section {
+  @include section-pad(128px, 100px);
+  position: relative;
+  .element-logo {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: clamp(140px, 25vw, 530px);
+  }
+  .row {
+    align-items: center;
+  }
+  img {
+    max-width: 100%;
+    object-fit: contain;
+    width: 100%;
+  }
+  .img-col {
+    display: flex;
+  }
+
+  .title {
+    @include title-block($grey-text, 40px, 800, 8px);
+  }
+  p {
+    @include paragraph($grey-text, 20px);
+  }
+}
+
+/* =========================================================
+   Laser
+   ========================================================= */
+
+#laser-section {
+  background-color: $color-primary;
+  // @include section-pad(128px, 0);
+
+  .img-col {
+    display: flex;
+    position: relative;
+    img {
+      @media (min-width: $bp-md) {
+        position: absolute;
+        left: 0;
+        bottom: 0;
+      }
+      max-width: 100%;
+    }
+  }
+
+  .laser-text {
+    @media (min-width: $bp-md) {
+      padding: 100px 0;
+    }
+  }
+
+  .kicker {
+    @include paragraph($yellow-text, 20px);
+    font-weight: 600;
+    margin-bottom: 16px;
+  }
+  .title {
+    @include title-block($color-white, 40px, 800, 8px);
+    line-height: 1.1;
+    margin-bottom: 16px;
+  }
+  p {
+    @include paragraph($color-white, 24px);
+  }
+}
+
+/* =========================================================
+   FAQ
+   ========================================================= */
+
+#faq.section {
+  @include section-pad(100px, 100px);
+
+  .section__header {
+    margin-bottom: 0;
+
+    .intro {
+      @include paragraph($grey-text-dark, 24px, 36px);
+      margin-bottom: 0;
+    }
+
+    h2 {
+      @include title-block($grey-text, 40px, 700, 80px);
+      line-height: 48px;
+      text-align: center;
+    }
+  }
+
+  .faq {
+    margin-inline: auto;
+    border-top: 1px solid $color-gray-200;
+
+    details {
+      border-bottom: 1px solid $color-gray-200;
+      padding-block: 1rem;
+
+      summary {
+        cursor: pointer;
+        list-style: none;
+        position: relative;
+        color: black;
+        font-size: 15.9px;
+        font-style: normal;
+        font-weight: 400;
+        line-height: 24px;
+
+        &::-webkit-details-marker {
+          display: none;
+        }
+
+        &::after {
+          content: '';
+          position: absolute;
+          right: 0;
+          top: 0.2rem;
+          inline-size: 24px;
+          block-size: 24px;
+          background: url('#{$faq-icon-closed}') no-repeat center / contain;
+        }
+      }
+
+      &[open] summary::after {
+        background-image: url('#{$faq-icon-open}');
+      }
+
+      p {
+        @include paragraph($faq-grey, 15.6px, 24px);
+        margin-top: 0.5rem;
+      }
+    }
+  }
+}
+
+/* =========================================================
+   Skeleton helpers (alinhados ao grid)
+   ========================================================= */
+
+.sk-section {
+  padding-block: clamp(32px, 6vw, 64px);
+}
+.sk-hero {
+  padding-block: clamp(48px, 9vw, 72px);
+  padding: 10px 0;
+  min-height: 450px;
+  display: flex;
+  align-items: center;
+  background: #f2f2f2;
+}
+
+.mt-16 {
+  margin-top: 16px;
+}
+.mx-auto {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* shimmer base */
+.sk-line,
+.sk-media {
+  position: relative;
+  overflow: hidden;
+  border-radius: 12px;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.06) 0%, rgba(0, 0, 0, 0.1) 50%, rgba(0, 0, 0, 0.06) 100%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.25s ease-in-out infinite;
+}
+
+/* tipografia “falsa” */
+.sk-h1 {
+  height: 36px;
+  width: 65%;
+  border-radius: 10px;
+  margin-bottom: 12px;
+}
+.sk-title {
+  height: 24px;
+  width: 50%;
+  margin-bottom: 12px;
+}
+.sk-kicker {
+  height: 14px;
+  width: 45%;
+  border-radius: 7px;
+  margin-bottom: 10px;
+}
+.sk-sub {
+  height: 14px;
+  width: 70%;
+  border-radius: 7px;
+  margin-bottom: 8px;
+}
+.sk-text {
+  height: 12px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+}
+
+/* blocos de mídia com proporção */
+.sk-media {
+  width: 100%;
+}
+.sk-rect {
+  aspect-ratio: 16 / 9;
+}
+.sk-photo {
+  aspect-ratio: 3 / 2;
+}
+.sk-portrait {
+  aspect-ratio: 4 / 5;
+}
+
+/* pilha de linhas com gap consistente */
+.sk-stack {
+  display: grid;
+  gap: 8px;
+}
+
+/* utilitários de largura */
+.w-95 {
+  width: 95%;
+}
+.w-90 {
+  width: 90%;
+}
+.w-88 {
+  width: 88%;
+}
+.w-82 {
+  width: 82%;
+}
+.w-80 {
+  width: 80%;
+}
+.w-70 {
+  width: 70%;
+}
+.w-65 {
+  width: 65%;
+}
+.w-60 {
+  width: 60%;
+}
+.w-55 {
+  width: 55%;
+}
+.w-45 {
+  width: 45%;
+}
+.w-40 {
+  width: 40%;
+}
+.w-35 {
+  width: 35%;
+}
+.w-28 {
+  width: 28%;
+}
+
+/* animação */
+@keyframes sk-shimmer {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* =========================================================
+   MOBILE (<= 767px)
+   ========================================================= */
+@media (max-width: $bp-sm-max) {
+  .section {
+    padding-block: 28px !important;
+  }
+
+  .locations-head {
+    padding: 48px 0 !important;
+    min-height: auto;
+
+    .section__header {
+      text-align: left;
+
+      h1 {
+        @include clamp-fz(22px, 7vw, 30px);
+        line-height: 1.15 !important;
+      }
+      .subtitle {
+        margin-inline: auto;
+        width: 100%;
+        font-size: 14px !important;
+        line-height: 1.55;
+        opacity: 0.92;
+        text-align: left;
+      }
+    }
+
+    .mask {
+      opacity: 0.75;
+    }
+  }
+
+  app-treatment-areas {
+    display: block;
+    margin-top: 8px;
+  }
+
+  #sessions-section {
+    padding: 36px 0 !important;
+
+    .title {
+      font-size: 22px !important;
+      margin-bottom: 6px;
+    }
+    p {
+      font-size: 15px !important;
+      line-height: 1.6;
+    }
+
+    .img-col {
+      margin-top: 16px;
+      justify-content: center;
+
+      img {
+        max-width: 92%;
+        height: auto;
+      }
+    }
+  }
+
+  #results {
+    padding-block: 40px !important;
+
+    .results__row {
+      row-gap: 18px;
+    }
+    .col-text {
+      order: 0;
+    }
+    .col-media {
+      order: 1;
+    }
+
+    .results__header {
+      // text-align: center;
+
+      .kicker {
+        font-size: 14px !important;
+        margin-bottom: 6px;
+      }
+      h2 {
+        font-size: 24px !important;
+        margin: 0 0 10px;
+        line-height: 1.2;
+      }
+    }
+
+    .results__text {
+      font-size: 15px !important;
+      line-height: 1.6;
+      // text-align: center;
+    }
+
+    app-before-after {
+      display: block;
+      max-width: 100%;
+      margin-bottom: 16px;
+    }
+    .obs {
+      font-size: clamp(14px, 1.5vw, 18px);
+      color: $grey-button;
+    }
+  }
+
+  #video-section.section {
+    padding: 44px 0 !important;
+
+    .section__header {
+      .intro {
+        font-size: 14px !important;
+        line-height: 1.5;
+      }
+      h2 {
+        font-size: 24px !important;
+        line-height: 1.25;
+        margin-bottom: 16px;
+      }
+    }
+
+    .video-text {
+      font-size: 15px !important;
+      margin-bottom: 24px;
+      line-height: 1.6 !important;
+    }
+
+    .video-cover {
+      border-radius: 10px;
+      aspect-ratio: 16/9;
+    }
+  }
+
+  #laser-section {
+    padding: 40px 0 0 !important;
+
+    .img-col {
+      order: 0;
+      justify-content: center;
+      margin-bottom: 16px;
+
+      img {
+        max-width: 88%;
+        height: auto;
+      }
+    }
+
+    .kicker {
+      font-size: 14px !important;
+      margin-bottom: 8px;
+    }
+    .title {
+      font-size: 24px !important;
+      margin-bottom: 6px;
+    }
+    p {
+      font-size: 15px !important;
+      line-height: 1.6;
+    }
+
+    /* texto centralizado no bloco colorido */
+    .col-12.col-md-5.offset-md-1 {
+      text-align: center;
+    }
+
+    /* ajuste específico (mantido do original) */
+    .row > .img-col {
+      order: 1;
+      margin-top: 16px;
+      padding: 0;
+      margin-bottom: 0;
+    }
+  }
+
+  #faq.section {
+    padding: 44px 0 !important;
+
+    .section__header h2 {
+      font-size: 24px !important;
+      margin-bottom: 20px;
+    }
+
+    .faq details {
+      padding-block: 12px;
+
+      summary {
+        font-size: 15px !important;
+        padding-right: 28px;
+
+        &::after {
+          inline-size: 20px;
+          block-size: 20px;
+          top: 2px;
+        }
+      }
+
+      p {
+        font-size: 14px !important;
+        line-height: 1.55;
+      }
+    }
+  }
+
+  /* Skeleton */
+  .sk-hero {
+    padding-block: 36px !important;
+  }
+  .sk-line {
+    border-radius: 8px;
+  }
+  .sk-h1 {
+    height: 24px;
+    width: 75%;
+  }
+  .sk-title {
+    height: 18px;
+    width: 60%;
+  }
+  .sk-kicker {
+    height: 12px;
+    width: 40%;
+  }
+  .sk-sub,
+  .sk-text {
+    height: 10px;
+  }
+  .sk-portrait {
+    aspect-ratio: 4/5;
+  }
+  .sk-photo {
+    aspect-ratio: 3/2;
+  }
+  .sk-rect {
+    aspect-ratio: 16/9;
+  }
+}
+
+/* =========================================================
+   TABLET (768–1199px)
+   ========================================================= */
+@media (min-width: $bp-md-min) and (max-width: $bp-lg-max) {
+  .locations-head {
+    padding: 64px 0;
+    min-height: auto;
+
+    .section__header {
+      h1 {
+        @include clamp-fz(26px, 4.2vw, 36px);
+      }
+      .subtitle {
+        font-size: 15px;
+      }
+    }
+  }
+
+  #sessions-section .title {
+    font-size: 28px;
+  }
+  #laser-section .title {
+    font-size: 28px;
+  }
+  #results h2 {
+    font-size: 32px;
+  }
+}

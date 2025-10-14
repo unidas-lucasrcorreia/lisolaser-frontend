@@ -1,0 +1,167 @@
+<main id="locations-page" class="page" aria-labelledby="locations-heading">
+  <section id="locations-head" class="section locations-head" aria-label="Unidades Lisô Laser" [style.--head-bg]="headBgVar()">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-12">
+          <header class="section__header">
+            <h1 id="locations-heading" [innerHTML]="pageTitle()"></h1>
+            @if (pageText()) {
+              <p class="subtitle" [innerHTML]="pageText()"></p>
+            }
+          </header>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section locations-search" aria-label="Pesquisar unidades">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-10 offset-md-1">
+          <h2>Pesquise uma unidade da Lisô:</h2>
+          <form class="searchbar" (submit)="onSubmitSearch($event)" role="search" aria-label="Busca de unidades">
+            <div class="searchbar__field">
+              <span class="searchbar__icon-left" aria-hidden="true">
+                <img src="/images/icons/pin.svg" alt="" width="18" height="18" />
+              </span>
+
+              <input
+                type="search"
+                class="searchbar__input"
+                [value]="search()"
+                (input)="onSearchInput($event)"
+                placeholder="Procure por cidade, CEP, estado ou nome"
+                aria-label="Digite cidade, CEP, estado ou nome da unidade"
+              />
+
+              <span class="searchbar__icon-right" aria-hidden="true">
+                <img src="/images/icons/search.svg" alt="" width="18" height="18" />
+              </span>
+            </div>
+
+            <button class="searchbar__button" type="submit" [attr.aria-label]="'Pesquisar por ' + (search() || 'todas as unidades')">PESQUISAR</button>
+          </form>
+
+          <div class="searchbar__divider" aria-hidden="true"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="locations-listing" class="section" aria-labelledby="locations-listing-heading">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-md-10 offset-md-1">
+          <h2 id="locations-listing-heading" class="sr-only">Lista de unidades</h2>
+
+          <ul class="locations-grid" role="list">
+            @if (loading()) {
+              @for (i of skeletons; track i) {
+                <li class="location-item" role="listitem" aria-hidden="true">
+                  <article class="location-card is-skeleton">
+                    <figure class="location-card__media">
+                      <app-skeleton variant="rect" [width]="'100%'" [height]="200"></app-skeleton>
+                    </figure>
+                    <div class="location-card__body">
+                      <app-skeleton variant="rect" [width]="'60%'" [height]="24" [radius]="4"></app-skeleton>
+                      <div class="sk-gap-10"></div>
+                      <app-skeleton variant="rect" [width]="'92%'" [height]="12" [radius]="4"></app-skeleton>
+                      <div class="sk-gap-6"></div>
+                      <app-skeleton variant="rect" [width]="'70%'" [height]="12" [radius]="4"></app-skeleton>
+                      <div class="sk-gap-14"></div>
+                      <app-skeleton variant="rect" [width]="'100%'" [height]="36" [radius]="6"></app-skeleton>
+                    </div>
+                  </article>
+                </li>
+              }
+            } @else {
+              @if (error()) {
+                <li class="location-item">
+                  <div class="error">{{ error() }}</div>
+                </li>
+              } @else {
+                @for (u of unidades(); track u.id) {
+                  <li class="location-item" role="listitem">
+                    <article class="location-card" itemscope itemtype="https://schema.org/LocalBusiness" [attr.aria-labelledby]="'loc-title-' + u.id">
+                      <figure (click)="openLocation(u)" class="location-card__media">
+                        <img class="location-card__image" [src]="u.featuredImage" [alt]="'Fachada da unidade ' + u.name" loading="lazy" decoding="async" width="640" height="420" itemprop="image" />
+                      </figure>
+                      <div class="location-card__body">
+                        <h3 class="location-card__title" [id]="'loc-title-' + u.id" itemprop="name">
+                          {{ u.name }}
+                        </h3>
+
+                        @if (distanceFromCep(u) && cepMode()) {
+                          <span class="dist-badge" aria-label="Distância a partir do CEP buscado">
+                            {{ distanceFromCep(u) }}
+                          </span>
+                        }
+
+                        <ul class="location-card__meta">
+                          <li class="meta-item">
+                            <span class="sr-only">Endereço: </span>
+                            <img src="/images/icons/pin.svg" alt="" />
+                            <span class="address" itemprop="address">{{ u.fullAddress }}</span>
+                          </li>
+
+                          @if (u.instagram) {
+                            <li class="meta-item">
+                              <span class="sr-only">Instagram: </span>
+                              <img src="/images/icons/location-instagram.svg" alt="" />
+                              <a class="social" [href]="'https://instagram.com/' + u.instagram!.replace('@', '')" target="_blank" rel="noopener nofollow" itemprop="sameAs">
+                                &#64;{{ u.instagram!.replace('@', '') }}
+                              </a>
+                            </li>
+                          }
+
+                          @if (u.whatsapp) {
+                            <li class="meta-item">
+                              <span class="sr-only">WhatsApp: </span>
+                              <img src="/images/icons/location-whatsapp.svg" alt="" />
+                              <a class="social" [href]="openOnWhatsApp(u.whatsapp)" target="_blank" rel="noopener nofollow" itemprop="sameAs">
+                                {{ u!.whatsapp | phoneBR }}
+                              </a>
+                            </li>
+                          }
+                        </ul>
+
+                        <a class="location-card__cta" [routerLink]="['/unidade', u.externalId, u.slug]" [attr.aria-label]="'Ver detalhes da unidade ' + u.name"> Detalhes </a>
+                      </div>
+                    </article>
+                  </li>
+                }
+              }
+            }
+          </ul>
+          @if (totalPages() > 1 && !loading()) {
+            <nav class="pagination" aria-label="Paginação de unidades">
+              <button class="page-btn nav" [disabled]="page() === 1" (click)="prevPage()" aria-label="Página anterior">
+                <svg xmlns="http://www.w3.org/2000/svg" width="7" height="13" viewBox="0 0 7 13" fill="none">
+                  <path d="M6.06667 12.3008L7 11.3008L2.06667 6.30078L7 1.30078L6.06667 0.300782L0.0666686 6.30078L6.06667 12.3008Z" fill="#FF6643" />
+                </svg>
+              </button>
+
+              @for (p of pagesToShow(); track p) {
+                <button
+                  class="page-btn page-number"
+                  [class.is-active]="p === page()"
+                  (click)="goToPage(p)"
+                  [attr.aria-current]="p === page() ? 'page' : null"
+                  [attr.aria-label]="'Ir para página ' + p"
+                >
+                  {{ p }}
+                </button>
+              }
+
+              <button class="page-btn nav" [disabled]="page() === totalPages()" (click)="nextPage()" aria-label="Próxima página">
+                <svg xmlns="http://www.w3.org/2000/svg" width="7" height="13" viewBox="0 0 7 13" fill="none">
+                  <path d="M0.933333 0.300781L0 1.30078L4.93333 6.30078L0 11.3008L0.933333 12.3008L6.93333 6.30078L0.933333 0.300781Z" fill="#FF6643" />
+                </svg>
+              </button>
+            </nav>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

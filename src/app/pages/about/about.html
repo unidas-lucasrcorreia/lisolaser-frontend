@@ -1,0 +1,367 @@
+<main id="about-page" class="page-section" itemscope itemtype="https://schema.org/AboutPage">
+  @defer (when about()) {
+    @let a = about();
+    @let fb = featured();
+
+    <!-- HERO -->
+    <section id="hero" class="main-banner">
+      <img class="hero__bg-left" src="/images/about/about-element.png" alt="" />
+
+      <div class="container">
+        <div class="row hero__row">
+          <!-- Texto -->
+          <div class="col-12 col-md-6 col-xxl-5 offset-xxl-1">
+            <h1 [innerHTML]="fb?.title"></h1>
+            <p>
+              {{ fb?.text }}
+            </p>
+          </div>
+
+          <!-- Imagens -->
+          <div class="col-12 col-md-6 col-xxl-5 offset-xxl-1">
+            <div class="hero__media">
+              <figure class="hero__media-card">
+                <img src="/images/about/about-hero-1.png" alt="Grupo de pessoas sorrindo" />
+              </figure>
+              <figure class="hero__media-circle">
+                <img src="/images/about/about-hero-2.png" alt="Costas de um homem" />
+              </figure>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALORES -->
+    <section id="valores" class="company-values section" aria-labelledby="values-title">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <ul class="items" role="list">
+              <li class="item item--missao">
+                <article>
+                  <h3 class="title">{{ a?.missionTitle }}</h3>
+                  <p class="text">{{ a?.missionText }}</p>
+                </article>
+              </li>
+
+              <li class="item item--valores">
+                <article>
+                  <h3 class="title">{{ a?.valuesTitle }}</h3>
+                  <p class="text">{{ a?.valuesText }}</p>
+                </article>
+              </li>
+
+              <li class="item item--seguranca">
+                <article>
+                  <h3 class="title">{{ a?.safetyTitle }}</h3>
+                  <p class="text">{{ a?.safetyTexto }}</p>
+                </article>
+              </li>
+
+              <li class="item item--etica">
+                <article>
+                  <h3 class="title">{{ a?.ethicsTitle }}</h3>
+                  <p class="text">{{ a?.ethicsText }}</p>
+                </article>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- JORNADA -->
+    @let j = journey();
+    <section id="jornada" class="journey section" aria-labelledby="journey-title">
+      <div class="container">
+        <div class="row journey__row">
+          <div class="col-12 col-md-5 offset-md-1 col-xxl-6">
+            <header class="journey-header">
+              <p class="kicker">{{ j?.preTitle }}</p>
+              <h2 id="journey-title">{{ j?.title }}</h2>
+            </header>
+            <p>{{ j?.text }}</p>
+
+            <ul class="items checklist" role="list">
+              <li class="item">
+                <div class="icon"><img src="/images/about/journey-1.svg" alt="" /></div>
+                Padrões de excelência em cada detalhe do atendimento
+              </li>
+              <li class="item">
+                <div class="icon"><img src="/images/about/journey-2.svg" alt="" /></div>
+                Treinamentos contínuos para manter nossa equipe sempre atualizada
+              </li>
+              <li class="item">
+                <div class="icon"><img src="/images/about/journey-3.svg" alt="" /></div>
+                Controle de qualidade rigoroso em todos os processos
+              </li>
+              <li class="item">
+                <div class="icon"><img src="/images/about/journey-4.svg" alt="" /></div>
+                Transparência nos procedimentos, garantindo confiança e segurança
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-12 col-md-6 col-xxl-5">
+            <figure class="journey-media">
+              <img [src]="imgOf(j?.image?.[0])" alt="Cliente sorrindo após atendimento" width="960" height="960" loading="lazy" decoding="async" />
+            </figure>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UNIDADES -->
+    @let loc = locBlock();
+    <section id="unidades" class="locations section" aria-labelledby="locations-title">
+      <div class="container">
+        <div class="row unidades__row">
+          <div class="col-12 col-md-6 col-xxl-5 offset-xxl-1">
+            <figure class="location-media">
+              <img [src]="imgOf(loc?.image?.[0])" alt="Recepção de uma unidade Lisô Laser" width="960" height="720" loading="lazy" decoding="async" />
+            </figure>
+          </div>
+
+          <div class="col-12 col-md-6 col-xxl-4">
+            <div class="content">
+              <h2 id="locations-title">{{ loc?.title }}</h2>
+              <p>{{ loc?.text }}</p>
+              <a class="btn btn-primary outline" href="/unidades" aria-label="Ver todas as unidades da Lisô Laser"> Ver todas as unidades </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFERENCIAIS -->
+    <section id="diferenciais" class="differential section" aria-labelledby="diff-title">
+      <div class="container">
+        <header class="row">
+          <div class="col-12">
+            <h2 id="diff-title">{{ a?.boxLeftTitle }}</h2>
+          </div>
+        </header>
+
+        <div class="row">
+          <!-- Caixa esquerda -->
+          <article class="col-12 col-md-6 card grey-card" aria-labelledby="box1-title">
+            <div class="box-items">
+              @if (a?.leftBox?.length) {
+                @for (it of a!.leftBox!; track it.title) {
+                  <div class="item" [class.first]="$index === 0">
+                    @if (it.preTitle) {
+                      <div class="category">{{ it.preTitle }}</div>
+                    }
+                    <div class="title">{{ it.title }}</div>
+                    <p>{{ it.text }}</p>
+                  </div>
+                }
+              }
+            </div>
+          </article>
+
+          <!-- Cartões -->
+          <article class="col-12 col-md-6 card cards" aria-labelledby="box2-title">
+            @if (a?.rightBox?.length) {
+              @for (rb of a!.rightBox!; track rb.title) {
+                <div class="diferencial-card">
+                  <div class="content">
+                    @if (rb.preTitle) {
+                      <div class="category">{{ rb.preTitle }}</div>
+                    }
+                    <div class="title">{{ rb.title }}</div>
+                    <p>{{ rb.text }}</p>
+                  </div>
+                  <img [src]="imgOf(rb.image?.[0])" alt="" />
+                </div>
+              }
+            }
+          </article>
+          <div class="element"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEXTO INSTITUCIONAL -->
+    <section id="sobre-a-empresa" class="company-text section" aria-labelledby="company-text-title">
+      <div class="container">
+        <div class="row">
+          <div class="col-12">
+            <p [innerHTML]="a?.servicesText"></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DEPOIMENTO -->
+    @let q = quote();
+    <section id="depoimento" class="about-quote section" aria-labelledby="quote-title">
+      <div class="container">
+        <div class="row quote__row">
+          <div class="col-12 col-md-5">
+            <figure class="quote-media">
+              <img
+                style="max-width: 100%; height: auto"
+                [src]="imgOf(q?.image?.[0]) || '/images/about/mock-element.png'"
+                alt="Elemento visual decorativo"
+                width="800"
+                height="600"
+                loading="lazy"
+                decoding="async"
+              />
+            </figure>
+          </div>
+
+          <div class="col-12 col-md-5 offset-md-1">
+            <blockquote>
+              <p>{{ q?.text }}</p>
+              <footer class="who-quoted">{{ q?.name }}</footer>
+            </blockquote>
+          </div>
+        </div>
+      </div>
+    </section>
+  } @placeholder {
+    <!-- HERO -->
+    <section class="sk section sk-hero">
+      <div class="container">
+        <div class="sk-split">
+          <div class="sk-col">
+            <div class="sk-line sk-headline w-85"></div>
+            <div class="sk-line sk-headline w-60"></div>
+            <div class="sk-line sk-body mt-12 w-70"></div>
+            <div class="sk-line sk-body w-55"></div>
+          </div>
+          <div class="sk-col">
+            <div class="sk-media sk-hero-rect"></div>
+            <div class="sk-media sk-hero-circle"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VALORES (4 cards) -->
+    <section class="sk section sk-values">
+      <div class="container">
+        <div class="sk-grid">
+          @for (i of [0, 1, 2, 3]; track i) {
+            <div class="sk-card">
+              <div class="sk-icon"></div>
+              <div class="sk-line sk-title w-70"></div>
+              <div class="sk-line sk-body w-90"></div>
+              <div class="sk-line sk-body w-80"></div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- JORNADA -->
+    <section class="sk section sk-journey">
+      <div class="container">
+        <div class="sk-split">
+          <div class="sk-col">
+            <div class="sk-line sk-kicker w-40"></div>
+            <div class="sk-line sk-title w-60"></div>
+            <div class="sk-stack">
+              <div class="sk-line sk-body w-95"></div>
+              <div class="sk-line sk-body w-88"></div>
+              <div class="sk-line sk-body w-80"></div>
+            </div>
+            <div class="sk-checks">
+              @for (i of [0, 1, 2, 3]; track i) {
+                <div class="sk-check">
+                  <span class="sk-dot"></span>
+                  <span class="sk-line sk-body w-60"></span>
+                </div>
+              }
+            </div>
+          </div>
+          <div class="sk-col">
+            <div class="sk-media sk-square"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UNIDADES -->
+    <section class="sk section sk-units">
+      <div class="container">
+        <div class="sk-split">
+          <div class="sk-col">
+            <div class="sk-media sk-photo"></div>
+          </div>
+          <div class="sk-col">
+            <div class="sk-line sk-title w-45"></div>
+            <div class="sk-stack">
+              <div class="sk-line sk-body w-95"></div>
+              <div class="sk-line sk-body w-90"></div>
+              <div class="sk-line sk-body w-75"></div>
+            </div>
+            <div class="sk-btn w-40 mt-12"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIFERENCIAIS -->
+    <section class="sk section sk-diffs">
+      <div class="container">
+        <div class="sk-line sk-title w-30 mx-auto"></div>
+
+        <div class="sk-split mt-16">
+          <!-- Caixa esquerda -->
+          <div class="sk-col">
+            <div class="sk-box">
+              @for (i of [0, 1, 2]; track i) {
+                <div class="sk-stack">
+                  <div class="sk-line sk-body w-28"></div>
+                  <div class="sk-line sk-subtitle w-60"></div>
+                  <div class="sk-line sk-body w-90"></div>
+                </div>
+              }
+            </div>
+          </div>
+
+          <!-- Cartões à direita -->
+          <div class="sk-col sk-stack-right">
+            @for (i of [0, 1]; track i) {
+              <div class="sk-card-right">
+                <div class="sk-right-text">
+                  <div class="sk-line sk-body w-30"></div>
+                  <div class="sk-line sk-subtitle w-55"></div>
+                  <div class="sk-line sk-body w-85"></div>
+                </div>
+                <div class="sk-media sk-thumb"></div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TEXTO INSTITUCIONAL -->
+    <section class="sk section sk-company">
+      <div class="container">
+        <div class="sk-line sk-headline w-70 mx-auto"></div>
+        <div class="sk-line sk-headline w-55 mx-auto mt-12"></div>
+      </div>
+    </section>
+
+    <!-- DEPOIMENTO -->
+    <section class="sk section sk-quote">
+      <div class="container">
+        <div class="sk-split">
+          <div class="sk-col"><div class="sk-media sk-oval"></div></div>
+          <div class="sk-col">
+            <div class="sk-line sk-body w-95"></div>
+            <div class="sk-line sk-body w-85"></div>
+            <div class="sk-line sk-body w-80"></div>
+            <div class="sk-line sk-small w-40 mx-auto mt-12"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
+</main>

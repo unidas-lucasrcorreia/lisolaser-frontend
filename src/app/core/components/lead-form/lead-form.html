@@ -1,0 +1,31 @@
+<main class="lead-form" aria-labelledby="lead-heading">
+  <form [formGroup]="form" autocomplete="off">
+    <!-- Nome -->
+    <div class="form-group">
+      <label for="lf-name">Nome</label>
+      <input id="lf-name" type="text" formControlName="name" placeholder="Seu nome" appTouchOnBlur />
+      <app-field-errors [control]="form.controls.name" label="Nome" />
+    </div>
+
+    <!-- Telefone -->
+    <div class="form-group">
+      <label for="lf-phone">Telefone</label>
+      <input id="lf-phone" type="text" mask="(00) 00000-0000" formControlName="phone" placeholder="(11) 90000-0000" appTouchOnBlur />
+      <app-field-errors [control]="form.controls.phone" label="Telefone" />
+    </div>
+
+    <!-- Unidade -->
+    <div class="form-group">
+      <label>Unidade</label>
+
+      <app-unit-select id="lf-unit" formControlName="unitId" [onlyWithUno]="true" placeholder="Digite cidade, CEP, estado ou nome" (selectedUnit)="onUnitPicked($event)"> </app-unit-select>
+
+      <app-field-errors [control]="form.controls.unitId" label="Unidade" />
+    </div>
+
+    <!-- Em zoneless prefiro submit explícito no click -->
+    <button type="button" (click)="submit()" [disabled]="submitting() || form.invalid">
+      {{ !submitting() ? 'Continuar' : 'Carregando...' }}
+    </button>
+  </form>
+</main>

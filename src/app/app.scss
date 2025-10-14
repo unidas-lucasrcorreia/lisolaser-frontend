@@ -1,0 +1,45 @@
+@use 'variables' as *;
+@use 'grid' as *;
+
+.content-wrapper {
+  position: relative;
+  padding-top: 88px;
+  @media (max-width: ($bp-md)) {
+    padding-top: 73px;
+  }
+  .social-list {
+    list-style: none;
+    margin: 0;
+    position: fixed;
+    left: 0;
+    top: 145px;
+    z-index: 99999;
+    background: $color-primary;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    gap: 16px;
+
+    li {
+      width: 20px;
+      height: 20px;
+      inline-size: 20px;
+      block-size: 20px;
+      display: inline-block;
+      img {
+        width: 100%;
+      }
+    }
+
+    a:hover .icon {
+      background: rgba($color-white, 0.3);
+    }
+    a:focus-visible .icon {
+      outline: 2px solid rgba($color-white, 0.6);
+      outline-offset: 3px;
+    }
+    @media (max-width: $bp-md) {
+      display: none;
+    }
+  }
+}

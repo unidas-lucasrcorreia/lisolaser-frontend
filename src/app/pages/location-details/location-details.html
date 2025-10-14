@@ -1,0 +1,185 @@
+<main id="location-details-page" class="page" aria-labelledby="location-name">
+  @if (!loading() && !error() && location) {
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <nav class="breadcrumb" aria-label="Breadcrumb" itemscope itemtype="https://schema.org/BreadcrumbList">
+            <ol class="breadcrumb__list" role="list">
+              <!-- HOME -->
+              <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a [routerLink]="['/']" itemprop="item">
+                  <span itemprop="name">Home</span>
+                </a>
+                <meta itemprop="position" content="1" />
+              </li>
+
+              <li class="breadcrumb__sep" aria-hidden="true">/</li>
+
+              <!-- UNIDADES -->
+              <li class="breadcrumb__item" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <a [routerLink]="['/unidades']" itemprop="item">
+                  <span itemprop="name">Unidades</span>
+                </a>
+                <meta itemprop="position" content="2" />
+              </li>
+
+              <li class="breadcrumb__sep" aria-hidden="true">/</li>
+
+              <!-- NOME DA UNIDADE (corrente) -->
+              <li class="breadcrumb__item" aria-current="page" itemprop="itemListElement" itemscope itemtype="https://schema.org/ListItem">
+                <span itemprop="name">{{ location!.name }}</span>
+                <meta itemprop="position" content="3" />
+              </li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ===== Loading ===== -->
+  @if (loading()) {
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-xl-10 offset-xl-1">
+          <header class="page__header">
+            <div class="header-skeleton">
+              <app-skeleton variant="text" [lines]="3" [gap]="12" [lineHeight]="20" [lastLineWidth]="'40%'"></app-skeleton>
+            </div>
+          </header>
+        </div>
+      </div>
+
+      <div class="row">
+        <!-- Galeria (skeleton) -->
+        <div class="col-12 col-xl-6 offset-xl-1">
+          <app-skeleton class="hero-skeleton" [radius]="12" [height]="550" [aspectRatio]="'16/9'"></app-skeleton>
+        </div>
+
+        <!-- Info cards (skeleton) -->
+        <div class="col-12 col-xl-4 offset-xl-1">
+          <div class="stack-16">
+            <div class="info-card-skel">
+              <app-skeleton class="icon" variant="square"></app-skeleton>
+              <app-skeleton class="title-line"></app-skeleton>
+              <div class="rows" style="grid-column: 2 / -1">
+                <app-skeleton class="row-line"></app-skeleton>
+                <app-skeleton class="row-line" [lastLineWidth]="'60%'"></app-skeleton>
+              </div>
+            </div>
+
+            <div class="info-card-skel">
+              <app-skeleton class="icon" variant="square"></app-skeleton>
+              <app-skeleton class="title-line"></app-skeleton>
+              <div class="rows" style="grid-column: 2 / -1">
+                <app-skeleton class="row-line"></app-skeleton>
+                <app-skeleton class="row-line"></app-skeleton>
+                <app-skeleton class="row-line" [lastLineWidth]="'50%'"></app-skeleton>
+              </div>
+            </div>
+
+            <app-skeleton variant="rect" [height]="44" [radius]="8"></app-skeleton>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ===== Erro ===== -->
+  @if (error()) {
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-xl-10 offset-xl-1">
+          <div class="error">{{ error() }}</div>
+        </div>
+      </div>
+    </div>
+  }
+
+  <!-- ===== Conteúdo ===== -->
+  @if (!loading() && !error() && location) {
+    <div class="container">
+      <!-- Título -->
+
+      <div class="row">
+        <div class="col-12 col-xl-10 offset-xl-1">
+          <header class="page__header">
+            <h1 id="location-name">{{ location!.name }}</h1>
+          </header>
+        </div>
+      </div>
+
+      <!-- Galeria + Infos -->
+      <div class="row">
+        <!-- Coluna esquerda: galeria -->
+        <div class="col-12 col-xl-6 offset-xl-1">
+          <app-gallery aria-label="Galeria de fotos da unidade" [images]="gallery"> </app-gallery>
+        </div>
+
+        <!-- Coluna direita: informações -->
+        <div class="col-12 col-xl-4 offset-xl-1">
+          <!-- Horários -->
+          <section class="info-card" aria-labelledby="hours-title">
+            <div class="info-card__icon" aria-hidden="true">
+              <img src="/images/icons/hours.svg" alt="" />
+            </div>
+            <div class="info-card__body">
+              <h2 id="hours-title" class="info-card__title">Horário de funcionamento</h2>
+              <dl class="info-card__list">
+                <div class="rowline">
+                  <dt>Segunda a Sexta:</dt>
+                  <dd>{{ location!.hours.week || '—' }}</dd>
+                </div>
+                <div class="rowline">
+                  <dt>Sábados:</dt>
+                  <dd>{{ location!.hours.sat || '—' }}</dd>
+                </div>
+                <div class="rowline">
+                  <dt>Domingos e feriados:</dt>
+                  <dd>{{ location!.hours.sun || '—' }}</dd>
+                </div>
+              </dl>
+            </div>
+          </section>
+
+          <!-- Endereço -->
+          <section class="info-card" aria-labelledby="address-title" itemscope itemtype="https://schema.org/LocalBusiness">
+            <div class="info-card__icon" aria-hidden="true">
+              <img src="/images/icons/pin.svg" alt="" />
+            </div>
+            <div class="info-card__body">
+              <h2 id="address-title" class="info-card__title">Endereço</h2>
+              <p class="info-card__text" itemprop="address">{{ location!.fullAddress }}</p>
+            </div>
+          </section>
+
+          <!-- Contatos -->
+          <section class="contacts-card" aria-labelledby="contacts-title">
+            <ul class="contact-list" role="list">
+              @if (location!.instagram) {
+                <li role="listitem">
+                  <img src="/images/icons/location-instagram.svg" alt="" aria-hidden="true" />
+                  <a class="link" [href]="'https://instagram.com/' + location!.instagram!.replace('@', '')" target="_blank" rel="noopener nofollow">
+                    &#64;{{ location!.instagram!.replace('@', '') }}
+                  </a>
+                </li>
+              }
+              @if (location!.whatsapp && whatsappLink) {
+                <li role="listitem">
+                  <img src="/images/icons/location-whatsapp.svg" alt="" aria-hidden="true" />
+                  <a class="link" [href]="whatsappLink" target="_blank" rel="noopener noreferrer">
+                    {{ location!.whatsapp | phoneBR }}
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+
+          <div class="cta-wrap">
+            <a class="cta-primary" [routerLink]="['/agendamento']" routerLinkActive="router-link-active"> Quero agendar aqui </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</main>

@@ -1,0 +1,111 @@
+@use 'variables' as *;
+@use 'grid' as *;
+
+.blog-article {
+  background-color: $blog-article-background;
+  padding: 50px 0;
+  &::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    bottom: -14vw;
+    height: 30vh;
+    background: $blog-article-background;
+    z-index: -2;
+  }
+  .post {
+    .post__header {
+      text-align: center;
+      position: relative;
+      .hero {
+        max-width: 100%;
+      }
+      .subtitle {
+        color: $color-primary;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .title-xl {
+        font-size: clamp(28px, 3.6vw, 64px);
+        font-style: normal;
+        font-weight: 600;
+        color: $color-dark;
+        margin-bottom: 8px;
+      }
+      .featured {
+        font-size: clamp(16px, 1.6vw, 21px);
+
+        font-weight: 400;
+        color: $color-dark-80;
+
+        margin-bottom: 64px;
+      }
+    }
+    .post__content {
+      padding: 64px 0;
+      ::ng-deep {
+        h1 {
+          margin-bottom: 16px;
+        }
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          font-weight: 400;
+          color: $color-dark;
+        }
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+          font-weight: 400;
+          margin-bottom: 8px;
+        }
+        img {
+          opacity: 1;
+          max-width: 100%;
+        }
+        p {
+          margin-bottom: 16px;
+          color: $color-dark;
+        }
+      }
+    }
+  }
+  .post.is-loading {
+    pointer-events: none;
+
+    .header-content {
+      padding-block: clamp(12px, 2.4vw, 24px);
+      text-align: center;
+    }
+
+    .hero-wrap {
+      /* mesma largura do hero real */
+      max-width: 100%;
+      margin-inline: auto;
+      margin-block: clamp(12px, 2vw, 20px) 0;
+    }
+
+    .post__content {
+      padding: clamp(32px, 5vw, 56px) 0;
+    }
+  }
+
+  /* pequenos helpers só para gaps (evita <div style="height"> por todo lado) */
+  .sk-gap-8 {
+    height: 8px;
+  }
+  .sk-gap-10 {
+    height: 10px;
+  }
+  .sk-gap-14 {
+    height: 14px;
+  }
+  .sk-gap-18 {
+    height: 18px;
+  }
+}

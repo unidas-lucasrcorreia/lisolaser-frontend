@@ -1,0 +1,51 @@
+<section class="gallery" aria-label="Galeria de imagens da unidade">
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <!-- IMAGEM PRINCIPAL -->
+        <swiper-container #mainSwiper class="gallery__main" init="false" aria-roledescription="carousel" [attr.aria-label]="'Imagem principal (' + (activeIndex + 1) + ' de ' + images.length + ')'">
+          @for (img of images; track img.src) {
+            <swiper-slide class="gallery__main-slide">
+              <img class="gallery__main-image" [src]="img.src" [alt]="img.alt || 'Imagem da unidade'" loading="lazy" decoding="async" />
+            </swiper-slide>
+          }
+        </swiper-container>
+
+        <!-- MINIATURAS (navegação custom) -->
+        <!-- MINIATURAS (navegação custom) -->
+        <div class="thumbs" [class.no-padding]="images.length < 5">
+          @if (showThumbNav) {
+            <button type="button" class="thumbs__nav thumbs__prev" (click)="thumbsPrev()" [disabled]="!canPrev" [attr.aria-disabled]="!canPrev" [class.is-disabled]="!canPrev" aria-label="Anterior">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M15.5 4l-8 8 8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          }
+
+          <swiper-container #thumbsSwiper class="gallery__thumbs" init="false" navigation="false" aria-roledescription="carousel" aria-label="Miniaturas da galeria">
+            @for (img of images; let i = $index; track img.src) {
+              <swiper-slide
+                class="gallery__thumb"
+                role="button"
+                [attr.aria-label]="'Mostrar imagem ' + (i + 1) + ' de ' + images.length"
+                [attr.tabindex]="i === activeIndex ? 0 : -1"
+                (click)="select(i)"
+                (keydown.enter)="select(i)"
+                (keydown.space)="select(i)"
+              >
+                <img class="gallery__thumb-image" [src]="img.src" [alt]="img.alt || 'Miniatura ' + (i + 1)" />
+              </swiper-slide>
+            }
+          </swiper-container>
+          @if (showThumbNav) {
+            <button type="button" class="thumbs__nav thumbs__next" (click)="thumbsNext()" [disabled]="!canNext" [attr.aria-disabled]="!canNext" [class.is-disabled]="!canNext" aria-label="Próximo">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M8.5 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </button>
+          }
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

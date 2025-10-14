@@ -1,0 +1,295 @@
+@use 'variables' as *;
+@use 'buttons' as *;
+@use 'sass:color';
+
+:root {
+  /* altura base do header; ajustamos nos bps abaixo */
+  --header-h: 88px;
+}
+
+.site-header {
+  background: $color-white;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04);
+  position: fixed;
+  width: 100%;
+  z-index: 4;
+}
+
+.header__bar {
+  min-height: 88px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+}
+
+.header__brand {
+  display: inline-flex;
+  align-items: center;
+
+  .header__logo {
+    display: block;
+    width: auto;
+  }
+}
+
+.header__nav {
+  flex: 1 1 auto;
+  display: flex;
+  justify-content: center;
+}
+
+.header__menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  justify-content: space-evenly;
+  margin: 0 1.9vw;
+}
+
+/* === Estilo exato do Figma === */
+.header__menu a {
+  display: inline-flex;
+  align-items: center;
+
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: clamp(12px, 0.9vw, 16px);
+  line-height: 1;
+  letter-spacing: 0;
+  text-transform: uppercase;
+
+  color: $color-primary;
+  text-decoration: none;
+  padding: 12px 8px;
+  border-radius: 6px;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+
+  &:hover {
+    background-color: rgba($color-primary, 0.08);
+  }
+  &.router-link-active {
+    background-color: rgba($color-primary, 0.12);
+  }
+
+  &:focus-visible {
+    outline: 0;
+    box-shadow: 0 0 0 3px rgba($color-primary, 0.2);
+  }
+
+  &.is-active {
+    background-color: rgba($color-primary, 0.12);
+  }
+}
+
+.header__cta {
+  @extend .btn;
+  @extend .btn-primary;
+  padding-inline: 14px;
+  font-size: clamp(12px, 1vw, 14px);
+}
+
+/* ===== Seus breakpoints existentes (mantidos) ===== */
+@media (max-width: 991.98px) {
+  .header__bar {
+    min-height: 72px;
+  }
+  .header__menu {
+    gap: 32px;
+  }
+  .header__logo {
+    height: 44px;
+  }
+  :root {
+    --header-h: 72px;
+  }
+}
+
+/* (mantido; não impacta desktop ≥1025) */
+@media (max-width: 767.98px) {
+  .header__nav {
+    display: none;
+  } // até implementar hambúrguer (reforçado também em ≤1024)
+  .header__cta {
+    min-height: 40px;
+    padding-inline: 16px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .header__link,
+  .header__cta {
+    transition: none;
+  }
+}
+
+/* =========================================================
+   MOBILE MENU (até 1024px) — sheet inferior
+   ========================================================= */
+
+/* Botão hambúrguer (escondido por padrão; aparece ≤1024) */
+.hamburger {
+  display: none;
+  width: 36px;
+  height: 28px;
+  position: relative;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  padding: 0;
+  margin-left: 8px;
+
+  span {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: $color-primary;
+    border-radius: 3px;
+    transition:
+      transform 0.2s ease,
+      opacity 0.2s ease,
+      top 0.2s ease;
+    &:nth-child(1) {
+      top: 0;
+    }
+    &:nth-child(2) {
+      top: 12px;
+    }
+    &:nth-child(3) {
+      top: 24px;
+    }
+  }
+
+  &.is-open span {
+    &:nth-child(1) {
+      top: 12px;
+      transform: rotate(45deg);
+    }
+    &:nth-child(2) {
+      opacity: 0;
+    }
+    &:nth-child(3) {
+      top: 12px;
+      transform: rotate(-45deg);
+    }
+  }
+}
+
+@media (max-width: 1024px) {
+  /* esconde nav/cta desktop e mostra hambúrguer */
+  .header__nav,
+  .header__cta {
+    display: none !important;
+  }
+  .hamburger {
+    display: inline-block;
+  }
+
+  /* SHEET que abre abaixo do header, sobrepondo conteúdo */
+  .mm-sheet {
+    position: fixed;
+    top: var(--header-h);
+    left: 0;
+    right: 0;
+    /* altura automática, com limite para caber na viewport */
+    max-height: calc(100dvh - var(--header-h));
+    overflow-y: auto;
+
+    background: #fff;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.16);
+    z-index: 9;
+
+    /* animação: desliza de cima (logo abaixo do header) */
+    transform: translateY(-8px);
+    opacity: 0;
+    animation: sheet-in 0.18s ease forwards;
+    padding: 16px 24px 20px;
+  }
+
+  @keyframes sheet-in {
+    to {
+      transform: none;
+      opacity: 1;
+    }
+  }
+
+  .mm-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &--head {
+      .mm-logo {
+        height: 44px;
+        width: auto;
+      }
+      .hamburger {
+        width: 36px;
+        height: 28px;
+      }
+      .hamburger span {
+        background: $color-primary;
+      }
+    }
+  }
+
+  .mm-sep {
+    margin: 12px -24px 8px;
+    border: 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.08);
+  }
+
+  .mm-list {
+    list-style: none;
+    margin: 12px 0 0;
+    padding: 0;
+    display: grid;
+    row-gap: 24px;
+
+    a {
+      display: block;
+      text-decoration: none;
+      color: $color-primary;
+      font-family: 'Open Sans', sans-serif;
+      font-weight: 400;
+      text-transform: uppercase;
+      font-size: clamp(20px, 3.8vw, 30px); /* grande como no print */
+      letter-spacing: 0.02em;
+      padding: 2px 0;
+    }
+  }
+
+  .mm-cta {
+    display: block;
+    margin-top: 28px;
+    text-align: center;
+    background: $color-primary;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 16px;
+    padding: 16px 18px;
+    font-weight: 700;
+    font-size: clamp(16px, 3.2vw, 22px);
+  }
+}
+
+/* respiro em telas pequenas */
+@media (max-width: 600px) {
+  .mm-sheet {
+    padding: 14px 18px 18px;
+  }
+  .mm-sep {
+    margin: 10px -18px 8px;
+  }
+  .mm-list {
+    row-gap: 20px;
+  }
+}

@@ -1,0 +1,96 @@
+<section id="treatment-areas" class="section treatment-areas" aria-labelledby="areas-heading">
+  <div class="container">
+    <div class="row">
+      <!-- Coluna esquerda -->
+      <div class="col-12 col-md-6 controls">
+        <header class="section__header ta-header">
+          <p class="intro primary">Escolha a Área que Deseja Tratar</p>
+          <h2 id="areas-heading">Áreas de Tratamento</h2>
+        </header>
+
+        @if (!genderLocked) {
+          <div class="ta-chip-row" role="group" aria-label="Selecione gênero">
+            <button
+              type="button"
+              class="chip"
+              [class.is-active]="gender === 'feminino'"
+              [class.chip--outline]="gender !== 'feminino'"
+              (click)="setGender('feminino')"
+              [attr.aria-pressed]="gender === 'feminino'"
+            >
+              FEMININO
+            </button>
+
+            <button
+              type="button"
+              class="chip"
+              [class.is-active]="gender === 'masculino'"
+              [class.chip--outline]="gender !== 'masculino'"
+              (click)="setGender('masculino')"
+              [attr.aria-pressed]="gender === 'masculino'"
+            >
+              MASCULINO
+            </button>
+          </div>
+        }
+
+        <div class="ta-chip-row" role="group" aria-label="Selecione vista">
+          <button type="button" class="chip" [class.is-active]="side === 'frente'" [class.chip--outline]="side !== 'frente'" (click)="setSide('frente')" [attr.aria-pressed]="side === 'frente'">
+            FRENTE
+          </button>
+
+          <button type="button" class="chip" [class.is-active]="side === 'costas'" [class.chip--outline]="side !== 'costas'" (click)="setSide('costas')" [attr.aria-pressed]="side === 'costas'">
+            COSTAS
+          </button>
+        </div>
+
+        <p class="ta-description">Utilizamos equipamentos de última geração com tecnologia alemã, aprovados pela ANVISA e reconhecidos mundialmente pela sua eficácia e segurança.</p>
+        <a routerLink="/agendamento" class="btn btn-primary cta"> Agende sua avaliação </a>
+      </div>
+
+      <!-- Coluna direita: imagem + hotspots + modal -->
+      <div class="col-12 col-md-6">
+        <img src="/images/treatments/element.png" alt="" class="element" />
+        <app-hotspot-modal [image]="currentImage" [hotspots]="currentHotspots"> </app-hotspot-modal>
+
+        <div class="ta-chip-mobile">
+          @if (!genderLocked) {
+            <div class="ta-chip-row" role="group" aria-label="Selecione gênero">
+              <button
+                type="button"
+                class="chip"
+                [class.is-active]="gender === 'feminino'"
+                [class.chip--outline]="gender !== 'feminino'"
+                (click)="setGender('feminino')"
+                [attr.aria-pressed]="gender === 'feminino'"
+              >
+                FEMININO
+              </button>
+
+              <button
+                type="button"
+                class="chip"
+                [class.is-active]="gender === 'masculino'"
+                [class.chip--outline]="gender !== 'masculino'"
+                (click)="setGender('masculino')"
+                [attr.aria-pressed]="gender === 'masculino'"
+              >
+                MASCULINO
+              </button>
+            </div>
+          }
+
+          <div class="ta-chip-row" role="group" aria-label="Selecione vista">
+            <button type="button" class="chip" [class.is-active]="side === 'frente'" [class.chip--outline]="side !== 'frente'" (click)="setSide('frente')" [attr.aria-pressed]="side === 'frente'">
+              FRENTE
+            </button>
+
+            <button type="button" class="chip" [class.is-active]="side === 'costas'" [class.chip--outline]="side !== 'costas'" (click)="setSide('costas')" [attr.aria-pressed]="side === 'costas'">
+              COSTAS
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

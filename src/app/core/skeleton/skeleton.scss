@@ -1,0 +1,107 @@
+@use 'variables' as *;
+
+/* =========================================
+   Skeleton Loader — estilos base e variáveis
+========================================= */
+
+/* Fallbacks (podem ser sobrescritos por CSS vars do host) */
+:host {
+  --sk-width: auto;
+  --sk-height: 1.2rem;
+  --sk-radius: 8px;
+  --sk-gap: 10px;
+  --sk-line-height: 14px;
+  --sk-last-width: 60%;
+  --sk-aspect: initial; /* e.g. 16/9 */
+
+  display: block;
+}
+:host.is-inline {
+  display: inline-block;
+}
+
+/* Paleta neutra — usa seus tokens se existirem */
+$sk-base: if(global-variable-exists(color-gray-200), $color-gray-200, #f0f0f0);
+$sk-dark: if(global-variable-exists(color-gray-300), $color-gray-300, #e2e2e2);
+
+/* Animações */
+@keyframes sk-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+@keyframes sk-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 0.85;
+  }
+}
+
+/* Bloco base */
+.sk {
+  width: var(--sk-width);
+  height: var(--sk-height);
+  border-radius: var(--sk-radius);
+  aspect-ratio: var(--sk-aspect);
+
+  background: linear-gradient(90deg, #{$sk-base} 0%, #{$sk-dark} 20%, #{$sk-base} 40%);
+  background-size: 200% 100%;
+  animation: sk-shimmer 1.2s linear infinite;
+
+  &.is-circle {
+    border-radius: 50%;
+  }
+  &.is-square {
+    /* se width não for definido, assume 100% e usa aspect 1/1 */
+    aspect-ratio: 1 / 1;
+    height: auto; /* altura deriva do aspect */
+  }
+
+  &.sk--pulse {
+    animation: sk-pulse 0.9s ease-in-out infinite;
+    background: $sk-base;
+  }
+  &.sk--noanim {
+    animation: none;
+    background: $sk-base;
+  }
+}
+
+/* Texto (N linhas) */
+.sk-text {
+  display: grid;
+  grid-auto-rows: var(--sk-line-height);
+  gap: var(--sk-gap);
+  width: var(--sk-width, 100%);
+
+  .sk-line {
+    height: var(--sk-line-height);
+    border-radius: var(--sk-radius);
+    background: linear-gradient(90deg, #{$sk-base} 0%, #{$sk-dark} 20%, #{$sk-base} 40%);
+    background-size: 200% 100%;
+    animation: sk-shimmer 1.2s linear infinite;
+  }
+
+  &.sk--pulse .sk-line {
+    animation: sk-pulse 0.9s ease-in-out infinite;
+    background: $sk-base;
+  }
+  &.sk--noanim .sk-line {
+    animation: none;
+    background: $sk-base;
+  }
+}
+
+/* Respeito a prefers-reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+  .sk,
+  .sk-text .sk-line {
+    animation: none !important;
+  }
+}

@@ -1,0 +1,87 @@
+@use 'variables' as *;
+@use 'grid' as *;
+
+:host {
+  display: block;
+}
+
+.banner {
+  width: 100%;
+}
+
+/* 🔸 Ative o efeito apenas quando .has-peek estiver no <section> */
+.has-peek .carousel__viewport {
+  overflow-x: hidden;
+}
+.has-peek .carousel__offset {
+  margin-inline: calc(var(--peek) * -1);
+}
+
+/* O restante é neutro (vale para os dois modos) */
+.carousel__swiper {
+  width: 100%;
+  display: block;
+}
+
+.carousel__slide {
+  height: 240px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+.carousel__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.carousel__link {
+  display: block;
+  height: 100%;
+}
+
+/* (opcional) ajustar setas só quando houver peek */
+.has-peek .carousel__swiper {
+  --swiper-navigation-sides-offset: 12px;
+}
+
+// @media (min-width: $bp-sm) {
+.banner__swiper::part(pagination) {
+  /* posição/área da paginação, se quiser */
+  bottom: 16px;
+}
+
+.banner__swiper::part(bullet),
+.banner__swiper::part(bullet-active) {
+  width: 7vw;
+  height: 8px;
+  border-radius: 10px;
+  background: $color-white;
+}
+
+.banner__swiper::part(bullet-active) {
+  background: $swiper-gray;
+}
+
+.carousel__swiper::part(pagination) {
+  /* ajuste a posição conforme seu layout com peek */
+  bottom: 10px;
+}
+
+.carousel__swiper::part(bullet),
+.carousel__swiper::part(bullet-active) {
+  width: 7vw; /* cuidado: pode ficar gigante em mobile */
+  height: 8px;
+  border-radius: 10px;
+  background: $color-white;
+  opacity: 1;
+}
+
+.carousel__swiper::part(bullet-active) {
+  background: $swiper-gray;
+}
+
+/* se o peek “empurrar” conteúdo, pode subir um pouco a paginação */
+.has-peek .carousel__swiper::part(pagination) {
+  bottom: 14px;
+}
+// }
