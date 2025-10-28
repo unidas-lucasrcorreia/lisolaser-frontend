@@ -86,7 +86,7 @@ export class TreatmentAreas {
       { id: 'seios', x: 44, y: 25.7, title: 'Seios' },
       { id: 'aureola', x: 70, y: 30, title: 'Aréola' },
       { id: 'axilas', x: 80, y: 25, title: 'Axilas' },
-      { id: 'ante_braco', x: 23, y: 32, title: 'Ante-Braço' },
+      { id: 'ante_braco', x: 23, y: 32, title: 'Antebraço' },
       { id: 'braco_inteiro', x: 86, y: 31, title: 'Braços Inteiros' },
       { id: 'maos_dedos', x: 35, y: 37, title: 'Mãos e Dedos' },
       { id: 'barriga', x: 59, y: 35, title: 'Barriga' },

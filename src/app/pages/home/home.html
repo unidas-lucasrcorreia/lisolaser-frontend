@@ -42,8 +42,8 @@
                     <img class="offer-card__bg" [src]="imgOf(o.image?.[0]) || '/images/offer-fallback.png'" alt="" loading="lazy" decoding="async" />
                     <div class="offer-card__shade"></div>
                     <div class="offer-card__content">
-                      @if (o.sessions) {
-                        <p class="offer-card__tag">{{ o.sessions }} sessões</p>
+                      @if (o.preTitle) {
+                        <p class="offer-card__tag">{{ o.preTitle }}</p>
                       }
                       <h3 class="offer-card__title" [innerHTML]="o.title"></h3>
                       <div class="offer-card__bottom">
